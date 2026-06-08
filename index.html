@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>POINT+ | Digital web for ST</title>
+  <title>POINT+ | Sistem Prestasi Siswa</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
@@ -25,7 +25,13 @@
       --text-primary: #f1f5f9; --text-secondary: #cbd5e1; --border: #334155;
       --navbar-blur: rgba(15,23,42,0.8); --accent: #60a5fa;
     }
-    /* ANIMASI STARTUP */
+    body.dark input, body.dark select, body.dark textarea {
+      color: #ffffff !important;
+      background: var(--bg-secondary);
+    }
+    body.dark input::placeholder { color: #94a3b8; }
+
+    /* STARTUP ANIMATION */
     .startup-overlay {
       position: fixed;
       top: 0;
@@ -60,58 +66,35 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* FADE TRANSITION */
-    .fade-transition {
-      transition: opacity 0.5s ease;
-    }
-    .navbar { backdrop-filter: blur(12px); background: var(--navbar-blur); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-    .logo { font-weight: 800; font-size: 1.7rem; background: linear-gradient(135deg, var(--accent), #8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; cursor: pointer; }
-    .nav-actions { display: flex; gap: 1.5rem; align-items: center; position: relative; }
-    .menu-icon { cursor: pointer; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); padding: 0.4rem 0.8rem; border-radius: 2rem; transition: 0.2s; font-size: 1.3rem; }
-    .menu-icon:hover { background: var(--border); }
-    /* SLIDE NAV MENU */
-    .slide-nav {
+    .fade-transition { transition: opacity 0.5s ease; }
+    
+    /* SLIDE MENU BAR */
+    .slide-menu {
       position: fixed;
       top: 0;
-      left: -300px;
-      width: 300px;
+      left: -280px;
+      width: 280px;
       height: 100%;
       background: var(--bg-secondary);
       box-shadow: 2px 0 20px rgba(0,0,0,0.1);
       z-index: 1000;
-      transition: left 0.3s ease;
+      transition: left 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
       display: flex;
       flex-direction: column;
       border-right: 1px solid var(--border);
     }
-    .slide-nav.open {
-      left: 0;
-    }
-    .slide-nav-header {
+    .slide-menu.open { left: 0; }
+    .slide-header {
       padding: 1.5rem;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .slide-nav-header h3 {
-      background: linear-gradient(135deg, var(--accent), #8b5cf6);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .close-menu {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--text-secondary);
-    }
-    .slide-nav-items {
-      flex: 1;
-      padding: 1rem 0;
-    }
-    .slide-nav-item {
+    .slide-header h3 { background: linear-gradient(135deg, var(--accent), #8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .close-menu { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary); }
+    .slide-items { flex: 1; padding: 1rem 0; }
+    .slide-item {
       display: flex;
       align-items: center;
       gap: 1rem;
@@ -120,22 +103,8 @@
       transition: 0.2s;
       color: var(--text-primary);
     }
-    .slide-nav-item:hover {
-      background: var(--border);
-    }
-    .slide-nav-item.active {
-      background: var(--accent);
-      color: white;
-    }
-    .sync-indicator-inline {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.8rem 1.5rem;
-      border-top: 1px solid var(--border);
-      font-size: 0.8rem;
-    }
-    .overlay {
+    .slide-item:hover { background: var(--border); }
+    .menu-overlay {
       position: fixed;
       top: 0;
       left: 0;
@@ -145,9 +114,13 @@
       z-index: 999;
       display: none;
     }
-    .overlay.show {
-      display: block;
-    }
+    .menu-overlay.show { display: block; }
+    
+    .navbar { backdrop-filter: blur(12px); background: var(--navbar-blur); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .logo { font-weight: 800; font-size: 1.7rem; background: linear-gradient(135deg, var(--accent), #8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; cursor: pointer; }
+    .nav-actions { display: flex; gap: 1.5rem; align-items: center; }
+    .menu-icon { cursor: pointer; display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.8rem; border-radius: 2rem; transition: 0.2s; font-size: 1.3rem; color: var(--text-primary); }
+    .menu-icon:hover { background: var(--border); }
     .student-nav { background: var(--bg-secondary); border-bottom: 1px solid var(--border); padding: 0.5rem 2rem; display: flex; gap: 2rem; overflow-x: auto; position: sticky; top: 70px; z-index: 99; }
     .student-nav a { text-decoration: none; color: var(--text-secondary); font-weight: 500; padding: 0.5rem 0; cursor: pointer; transition: 0.2s; border-bottom: 2px solid transparent; }
     .student-nav a:hover, .student-nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
@@ -159,48 +132,43 @@
     button:hover { background: var(--accent-dark); transform: translateY(-2px); }
     .btn-danger { background: var(--danger); }
     .btn-warning { background: var(--warning); color: black; }
-    .btn-small { padding: 0.3rem 0.8rem; font-size: 0.7rem; }
     input, select { background: var(--bg-secondary); border: 1px solid var(--border); padding: 0.7rem 1rem; border-radius: 1rem; width: 100%; margin-top: 0.3rem; }
     .hidden-page { display: none !important; }
     .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
     .badge { background: var(--accent); color: white; border-radius: 2rem; padding: 0.3rem 1rem; font-size: 0.8rem; }
-    .sync-status { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 1rem; background: var(--success); color: white; }
-    .sync-offline { background: var(--danger); }
     .login-container { max-width: 450px; margin: 2rem auto; }
     .leaderboard-container { max-width: 500px; margin: 2rem auto 0 auto; }
     .logout-btn { background: var(--danger); padding: 0.4rem 1rem; font-size: 0.85rem; }
     canvas { max-height: 260px; width: 100%; }
     .preview-img { max-width: 80px; border-radius: 8px; cursor: pointer; margin-top: 8px; transition: 0.2s; }
-    .preview-img:hover { transform: scale(1.05); opacity: 0.9; }
     .pending-item { background: rgba(245, 158, 11, 0.1); border-left: 3px solid var(--warning); margin-bottom: 0.75rem; padding: 0.8rem; border-radius: 0.8rem; }
     .reset-fab { position: fixed; bottom: 30px; right: 30px; background: var(--danger); color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1000; border: none; }
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
-    .modal-content { background: var(--bg-secondary); border-radius: 1.5rem; padding: 2rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; text-align: center; }
-    .achievement-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.5rem; margin: 1rem 0; max-height: 400px; overflow-y: auto; }
-    .achievement-option { padding: 0.6rem; border-radius: 0.5rem; cursor: pointer; transition: 0.2s; text-align: left; font-size: 0.8rem; border: 1px solid var(--border); }
-    .achievement-option:hover { background: var(--accent); color: white; }
+    .modal-content { background: var(--bg-secondary); border-radius: 1.5rem; padding: 2rem; max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto; }
+    /* TABLE STYLE FOR ACHIEVEMENT MODAL */
+    .achievement-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .achievement-table th, .achievement-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+    .achievement-table th { background: var(--border); font-weight: 600; position: sticky; top: 0; }
+    .achievement-table tr { cursor: pointer; transition: 0.2s; }
+    .achievement-table tr:hover { background: var(--accent); color: white; }
     .search-box { width: 100%; padding: 0.6rem; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 0.8rem; background: var(--bg-secondary); color: var(--text-primary); }
     .about-text { line-height: 1.8; text-align: justify; }
     .about-text h3 { margin-top: 1rem; margin-bottom: 0.5rem; color: var(--accent); }
-    .faq-rules-text { line-height: 1.8; }
-    .faq-rules-text h3 { margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-    .faq-rules-text h4 { margin-top: 1rem; margin-bottom: 0.3rem; color: var(--text-primary); }
-    .faq-rules-text p { margin-bottom: 0.5rem; }
-    .faq-rules-text ul { margin-left: 1.5rem; margin-bottom: 1rem; }
-    .faq-rules-text li { margin-bottom: 0.3rem; }
+    .faq-rules-text { line-height: 1.8; text-align: left; }
+    .faq-rules-text h3 { margin-top: 1rem; margin-bottom: 0.5rem; color: var(--accent); }
+    .faq-rules-text h4 { margin-top: 0.5rem; margin-bottom: 0.2rem; color: var(--text-primary); }
     .leaderboard-item-new { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--border); transition: 0.2s; }
     .leaderboard-item-new:hover { background: var(--border); border-radius: 1rem; }
     .rank-medal { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 1.4rem; }
-    .rank-gold { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; box-shadow: 0 2px 10px rgba(251,191,36,0.3); }
+    .rank-gold { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; }
     .rank-silver { background: linear-gradient(135deg, #94a3b8, #64748b); color: white; }
     .rank-bronze { background: linear-gradient(135deg, #cd7f32, #b87333); color: white; }
     .rank-normal { background: var(--border); color: var(--text-secondary); }
     .leaderboard-detail { flex: 1; }
     .leaderboard-name-new { font-weight: 700; font-size: 1rem; }
-    .leaderboard-points-new { font-size: 0.8rem; color: var(--gold); font-weight: 600; margin-top: 2px; }
+    .leaderboard-points-new { font-size: 0.8rem; color: var(--gold); font-weight: 600; }
     .leaderboard-progress { width: 100px; height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 6px; }
-    .leaderboard-progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold), #f59e0b); border-radius: 4px; }
-    .leaderboard-badges-new { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 5px; }
+    .leaderboard-progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold), #f59e0b); }
     .quest-card-improved {
       background: var(--bg-secondary);
       border-radius: 1rem;
@@ -210,27 +178,29 @@
       transition: all 0.3s ease;
     }
     .quest-card-improved:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-    .quest-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem; }
+    .quest-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; }
     .quest-title { font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-    .quest-badge-earned { background: linear-gradient(135deg, var(--gold), #f59e0b); color: white; padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; font-weight: 600; }
-    .quest-badge-pending { background: var(--border); color: var(--text-secondary); padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; font-weight: 600; }
-    .quest-desc { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.8rem; }
+    .quest-badge-earned { background: linear-gradient(135deg, var(--gold), #f59e0b); color: white; padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; }
+    .quest-badge-pending { background: var(--border); color: var(--text-secondary); padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; }
     .quest-progress-improved { background: var(--border); border-radius: 1rem; height: 10px; overflow: hidden; margin: 0.5rem 0; }
     .quest-progress-fill { background: linear-gradient(90deg, var(--accent), #8b5cf6); height: 100%; border-radius: 1rem; transition: width 0.5s ease; }
-    .quest-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; font-size: 0.75rem; }
+    .quest-footer { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.75rem; }
     .quest-reward { color: var(--gold); font-weight: 600; }
-    .history-item { background: var(--bg-secondary); border-radius: 1rem; padding: 1rem; margin-bottom: 0.8rem; border: 1px solid var(--border); transition: 0.2s; }
+    .history-item { background: var(--bg-secondary); border-radius: 1rem; padding: 1rem; margin-bottom: 0.8rem; border: 1px solid var(--border); }
     .history-item:hover { transform: translateX(4px); border-left-color: var(--accent); border-left-width: 3px; }
-    .history-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
-    .history-title { font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
+    .history-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 0.5rem; }
     .history-status { padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; font-weight: 600; }
     .status-approved { background: var(--success); color: white; }
     .status-quest { background: var(--gold); color: black; }
-    .history-details { font-size: 0.8rem; color: var(--text-secondary); display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
     .filter-bar { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
-    .delete-pending-btn { background: var(--danger); color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; cursor: pointer; transition: 0.2s; }
-    .delete-pending-btn:hover { background: #dc2626; transform: scale(1.05); }
-    @media (max-width: 640px) { .navbar { padding: 0.8rem 1rem; } .student-nav { padding: 0.5rem 1rem; gap: 1rem; } .container { padding: 0 1rem; } .achievement-grid { grid-template-columns: 1fr; } .slide-nav { width: 280px; } }
+    .delete-pending-btn { background: var(--danger); color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; cursor: pointer; }
+    .delete-pending-btn:hover { background: #dc2626; }
+    .prestasi-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .prestasi-table th, .prestasi-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+    .prestasi-table th { background: var(--border); font-weight: 600; }
+    .detail-btn { background: var(--accent); color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; }
+    .sync-indicator { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 1rem; background: var(--success); color: white; display: inline-block; margin-left: 0.5rem; }
+    @media (max-width: 640px) { .navbar { padding: 0.8rem 1rem; } .student-nav { padding: 0.5rem 1rem; gap: 1rem; } .container { padding: 0 1rem; } .prestasi-table { font-size: 0.7rem; } }
   </style>
 </head>
 <body>
@@ -243,41 +213,31 @@
   </div>
 </div>
 
-<nav class="navbar">
-  <div class="logo" id="homeLogoBtn">POINT+</div>
-  <div class="nav-actions">
-    <div class="menu-icon" id="menuIcon">
-      <i class="fas fa-bars"></i>
-    </div>
-    <div class="menu-item" id="themeToggle"><i class="fas fa-moon"></i> <span class="hide-mobile">Mode</span></div>
-  </div>
-</nav>
-
-<!-- SLIDE NAV MENU -->
-<div class="overlay" id="menuOverlay"></div>
-<div class="slide-nav" id="slideNav">
-  <div class="slide-nav-header">
+<!-- SLIDE MENU BAR -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="slide-menu" id="slideMenu">
+  <div class="slide-header">
     <h3><i class="fas fa-bars"></i> Menu</h3>
     <button class="close-menu" id="closeMenuBtn"><i class="fas fa-times"></i></button>
   </div>
-  <div class="slide-nav-items">
-    <div class="slide-nav-item" id="menuHome">
-      <i class="fas fa-home"></i> <span>Home</span>
-    </div>
-    <div class="slide-nav-item" id="menuAboutSlide">
-      <i class="fas fa-info-circle"></i> <span>About</span>
-    </div>
-    <div class="slide-nav-item" id="menuFaqRules">
-      <i class="fas fa-question-circle"></i> <span>FAQ & Rules</span>
-    </div>
-    <div class="slide-nav-item" id="menuAdminSlide">
-      <i class="fas fa-user-shield"></i> <span>Admin Login</span>
-    </div>
+  <div class="slide-items">
+    <div class="slide-item" id="slideHome"><i class="fas fa-home"></i> Home</div>
+    <div class="slide-item" id="slideAbout"><i class="fas fa-info-circle"></i> About</div>
+    <div class="slide-item" id="slideFaqRules"><i class="fas fa-question-circle"></i> FAQ & Rules</div>
+    <div class="slide-item" id="slideAdmin"><i class="fas fa-user-shield"></i> Admin Login</div>
   </div>
-  <div class="sync-indicator-inline">
-    <i class="fas fa-cloud"></i> <span id="syncIndicatorInline">🔄 Memuat...</span>
+  <div class="slide-item" style="border-top: 1px solid var(--border); margin-top: auto;">
+    <i class="fas fa-cloud"></i> <span id="syncIndicator">Memuat...</span>
   </div>
 </div>
+
+<nav class="navbar">
+  <div class="logo" id="homeLogoBtn">POINT+</div>
+  <div class="nav-actions">
+    <div class="menu-icon" id="menuIcon"><i class="fas fa-bars"></i></div>
+    <div class="menu-item" id="themeToggle"><i class="fas fa-moon"></i></div>
+  </div>
+</nav>
 
 <div class="container" id="mainContainer">
   <!-- LOGIN PAGE -->
@@ -313,10 +273,8 @@
         <h3>Digital Electronic Studio</h3>
         <p>Digital Electronic Studio adalah sebuah komunitas kreatif yang berfokus pada pengembangan teknologi, media digital, dan inovasi di kalangan pelajar. Komunitas ini menjadi wadah bagi siswa untuk belajar, bereksperimen, dan menciptakan berbagai karya digital seperti video edukasi, desain grafis, hingga proyek berbasis teknologi.</p>
         <p>Dengan semangat kolaborasi dan eksplorasi, Digital Electronic Studio tidak hanya menjadi tempat berkarya, tetapi juga ruang untuk mengasah keterampilan abad 21 seperti kreativitas, pemecahan masalah, dan literasi digital. Kami percaya bahwa teknologi bukan hanya alat, tetapi juga sarana untuk menciptakan perubahan positif di lingkungan sekolah dan masyarakat.</p>
-        
         <h3>Tentang POINT+</h3>
         <p>POINT+ adalah sebuah platform digital berbasis web yang dikembangkan oleh Digital Electronic Studio untuk membantu sistem pencatatan dan pengelolaan poin prestasi siswa secara modern, transparan, dan efisien. Website ini dirancang khusus untuk mendukung sekolah dalam mendokumentasikan berbagai bentuk prestasi siswa, baik di bidang akademik maupun non-akademik.</p>
-        
         <h3>Tujuan POINT+</h3>
         <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
           <li>Meningkatkan transparansi dalam sistem penilaian prestasi siswa</li>
@@ -325,7 +283,6 @@
           <li>Mengurangi penggunaan sistem manual yang kurang efisien</li>
           <li>Menyediakan akses informasi yang cepat dan mudah bagi siswa dan guru</li>
         </ul>
-        
         <h3>Visi</h3>
         <p>Menjadi platform digital unggulan di lingkungan sekolah yang mendukung perkembangan prestasi siswa secara terukur, modern, dan berbasis teknologi.</p>
       </div>
@@ -341,62 +298,26 @@
       </div>
       <div class="faq-rules-text">
         <h3>❓ FAQ (Frequently Asked Questions)</h3>
-        
-        <h4>1. Apa itu POIN+?</h4>
-        <p>POIN+ adalah platform digital untuk mencatat dan mengelola poin prestasi siswa secara online, baik akademik maupun non-akademik.</p>
-        
-        <h4>2. Siapa saja yang bisa menggunakan POIN+?</h4>
-        <p>Siswa → untuk melihat poin prestasi<br>Guru/Pembina → untuk menginput dan memverifikasi poin<br>Admin → untuk mengelola sistem dan data</p>
-        
-        <h4>3. Bagaimana cara mendapatkan poin?</h4>
-        <p>Poin diperoleh dari: Prestasi akademik (nilai, lomba, olimpiade), Prestasi non-akademik (ekstrakurikuler, kegiatan sekolah), Kontribusi positif di lingkungan sekolah.</p>
-        
-        <h4>4. Bagaimana cara melihat poin saya?</h4>
-        <p>Siswa dapat login ke akun masing-masing, lalu membuka dashboard untuk melihat total poin dan riwayat prestasi.</p>
-        
-        <h4>5. Siapa yang menginput poin?</h4>
-        <p>Poin hanya dapat diinput oleh guru, pembina, atau admin yang berwenang.</p>
-        
-        <h4>6. Apakah siswa bisa mengubah poin sendiri?</h4>
-        <p>Tidak. Siswa hanya bisa melihat data. Perubahan hanya bisa dilakukan oleh pihak yang berwenang.</p>
-        
-        <h4>7. Bagaimana jika ada kesalahan data poin?</h4>
-        <p>Laporkan kepada guru atau admin dengan bukti yang jelas agar dapat diverifikasi dan diperbaiki.</p>
-        
-        <h4>8. Apakah poin bisa berkurang?</h4>
-        <p>Bisa, jika terdapat pelanggaran aturan sekolah atau kesalahan input yang sudah dikoreksi.</p>
-        
-        <h4>9. Apakah data di POIN+ aman?</h4>
-        <p>Ya, data dikelola secara digital dan hanya dapat diakses oleh pengguna yang memiliki akun resmi.</p>
-        
-        <h4>10. Apa manfaat POIN+ bagi siswa?</h4>
-        <p>Memantau perkembangan prestasi, Meningkatkan motivasi, Menjadi rekam jejak prestasi siswa.</p>
+        <h4>1. Apa itu POIN+?</h4><p>POIN+ adalah platform digital untuk mencatat dan mengelola poin prestasi siswa secara online, baik akademik maupun non-akademik.</p>
+        <h4>2. Siapa saja yang bisa menggunakan POIN+?</h4><p>Siswa → untuk melihat poin prestasi<br>Guru/Pembina → untuk menginput dan memverifikasi poin<br>Admin → untuk mengelola sistem dan data</p>
+        <h4>3. Bagaimana cara mendapatkan poin?</h4><p>Poin diperoleh dari: Prestasi akademik (nilai, lomba, olimpiade), Prestasi non-akademik (ekstrakurikuler, kegiatan sekolah), Kontribusi positif di lingkungan sekolah.</p>
+        <h4>4. Bagaimana cara melihat poin saya?</h4><p>Siswa dapat login ke akun masing-masing, lalu membuka dashboard untuk melihat total poin dan riwayat prestasi.</p>
+        <h4>5. Siapa yang menginput poin?</h4><p>Poin hanya dapat diinput oleh guru, pembina, atau admin yang berwenang.</p>
+        <h4>6. Apakah siswa bisa mengubah poin sendiri?</h4><p>Tidak. Siswa hanya bisa melihat data. Perubahan hanya bisa dilakukan oleh pihak yang berwenang.</p>
+        <h4>7. Bagaimana jika ada kesalahan data poin?</h4><p>Laporkan kepada guru atau admin dengan bukti yang jelas agar dapat diverifikasi dan diperbaiki.</p>
+        <h4>8. Apakah poin bisa berkurang?</h4><p>Bisa, jika terdapat pelanggaran aturan sekolah atau kesalahan input yang sudah dikoreksi.</p>
+        <h4>9. Apakah data di POIN+ aman?</h4><p>Ya, data dikelola secara digital dan hanya dapat diakses oleh pengguna yang memiliki akun resmi.</p>
+        <h4>10. Apa manfaat POIN+ bagi siswa?</h4><p>Memantau perkembangan prestasi, Meningkatkan motivasi, Menjadi rekam jejak prestasi siswa.</p>
         
         <h3>📜 Rules / Peraturan Penggunaan POIN+</h3>
-        
-        <h4>1. Kejujuran Data</h4>
-        <p>Semua data prestasi harus berdasarkan fakta dan bukti yang valid. Dilarang memalsukan data.</p>
-        
-        <h4>2. Akses Akun</h4>
-        <p>Setiap pengguna wajib menjaga kerahasiaan akun. Dilarang menggunakan akun orang lain tanpa izin.</p>
-        
-        <h4>3. Input Data</h4>
-        <p>Hanya guru/admin yang boleh menginput atau mengedit poin. Input harus sesuai kategori yang telah ditentukan.</p>
-        
-        <h4>4. Etika Penggunaan</h4>
-        <p>Gunakan platform dengan bijak. Dilarang menyalahgunakan sistem untuk kepentingan pribadi.</p>
-        
-        <h4>5. Pelaporan Kesalahan</h4>
-        <p>Jika terdapat kesalahan data, pengguna wajib melaporkan dengan cara yang benar dan sopan.</p>
-        
-        <h4>6. Sanksi</h4>
-        <p>Pelanggaran terhadap aturan dapat mengakibatkan: Pengurangan poin, Penonaktifan akun, Tindakan sesuai kebijakan sekolah.</p>
-        
-        <h4>7. Privasi Data</h4>
-        <p>Data pengguna dijaga kerahasiaannya dan hanya digunakan untuk kepentingan pendidikan.</p>
-        
-        <h4>8. Perubahan Sistem</h4>
-        <p>Admin berhak melakukan pembaruan sistem dan aturan kapan saja demi peningkatan kualitas layanan.</p>
+        <h4>1. Kejujuran Data</h4><p>Semua data prestasi harus berdasarkan fakta dan bukti yang valid. Dilarang memalsukan data.</p>
+        <h4>2. Akses Akun</h4><p>Setiap pengguna wajib menjaga kerahasiaan akun. Dilarang menggunakan akun orang lain tanpa izin.</p>
+        <h4>3. Input Data</h4><p>Hanya guru/admin yang boleh menginput atau mengedit poin. Input harus sesuai kategori yang telah ditentukan.</p>
+        <h4>4. Etika Penggunaan</h4><p>Gunakan platform dengan bijak. Dilarang menyalahgunakan sistem untuk kepentingan pribadi.</p>
+        <h4>5. Pelaporan Kesalahan</h4><p>Jika terdapat kesalahan data, pengguna wajib melaporkan dengan cara yang benar dan sopan.</p>
+        <h4>6. Sanksi</h4><p>Pelanggaran terhadap aturan dapat mengakibatkan: Pengurangan poin, Penonaktifan akun, Tindakan sesuai kebijakan sekolah.</p>
+        <h4>7. Privasi Data</h4><p>Data pengguna dijaga kerahasiaannya dan hanya digunakan untuk kepentingan pendidikan.</p>
+        <h4>8. Perubahan Sistem</h4><p>Admin berhak melakukan pembaruan sistem dan aturan kapan saja demi peningkatan kualitas layanan.</p>
       </div>
     </div>
   </div>
@@ -416,6 +337,7 @@
     </div>
 
     <div id="overviewPage">
+      <div class="card"><h2 id="helloStudentName">Hello, Siswa!</h2></div>
       <div class="card" style="background: linear-gradient(135deg, var(--accent), #8b5cf6); color: white;">
         <div class="flex-between"><div><i class="fas fa-star"></i> Level Siswa</div><div><i class="fas fa-trophy"></i> <strong id="studentLevel">Pemula</strong></div></div>
         <div style="font-size: 2rem; font-weight: bold;" id="totalPointsDisplay">0</div>
@@ -423,97 +345,51 @@
         <div class="flex-between" style="margin-top: 0.5rem; font-size: 0.8rem;"><span>📅 Total Poin</span><span id="nextLevelInfo">Butuh 50 poin lagi ke Level Perunggu</span></div>
       </div>
       <div class="card"><h3><i class="fas fa-chart-line"></i> Grafik Prestasi</h3><canvas id="studentChart"></canvas></div>
+      <div class="card"><h3><i class="fas fa-table-list"></i> 📋 Daftar Prestasi</h3><div style="overflow-x:auto;"><table class="prestasi-table" id="studentPrestasiTable"><thead><tr><th>Kode</th><th>Nama Prestasi</th><th>Tanggal</th><th>Status</th></tr></thead><tbody><tr><td colspan="4" style="text-align:center;">Belum ada数据</tbody></table></div></div>
       <div class="card"><h3><i class="fas fa-medal"></i> 🏆 Lencana yang Didapat</h3><div id="badgesList" class="flex-between" style="gap: 0.5rem; flex-wrap: wrap;"></div></div>
     </div>
 
     <div id="uploadPage" class="hidden-page">
-      <div class="card">
-        <h3><i class="fas fa-plus-circle"></i> Ajukan Prestasi Baru</h3>
-        <form id="pointForm">
-          <label>📌 Pilih Kode Prestasi (60+ Jenis)</label>
-          <input type="text" id="selectedAchievementDisplay" placeholder="Klik untuk memilih prestasi" readonly style="cursor: pointer; background: var(--bg-secondary);" onclick="openAchievementModal()">
-          <input type="hidden" id="achievementCode">
-          <div id="achievementDesc" style="font-size:0.75rem; margin:5px 0; color: var(--text-secondary);"></div>
-          <label>🏷️ Grade Penyelenggara</label>
-          <select id="gradeSelect" required><option value="A">A - Dinas Pemerintah</option><option value="B">B - Non Pemerintah</option></select>
-          <label>⭐ Poin Otomatis</label><input type="text" id="autoPoints" readonly style="background:var(--border); font-weight:bold;">
-          <label>📸 Foto Bukti</label><input type="file" id="proofImage" accept="image/*"><div id="previewImg" style="margin: 8px 0;"></div>
-          <button type="submit" style="width:100%; margin-top:12px;"><i class="fas fa-paper-plane"></i> Kirim ke Verifikasi</button>
-        </form>
-      </div>
-      <div class="card">
-        <h3><i class="fas fa-clock"></i> ⏳ Pengajuan Menunggu Verifikasi</h3>
-        <div id="pendingStatusList" style="max-height: 300px; overflow-y: auto;"><div style="text-align: center; padding: 1rem;">Memuat...</div></div>
-      </div>
+      <div class="card"><h3><i class="fas fa-plus-circle"></i> Ajukan Prestasi Baru</h3><form id="pointForm"><label>📌 Pilih Kode Prestasi (60+ Jenis)</label><input type="text" id="selectedAchievementDisplay" placeholder="Klik untuk memilih prestasi" readonly style="cursor: pointer;" onclick="openAchievementModal()"><input type="hidden" id="achievementCode"><div id="achievementDesc" style="font-size:0.75rem; margin:5px 0;"></div><label>🏷️ Grade Penyelenggara</label><select id="gradeSelect"><option value="A">A - Dinas Pemerintah</option><option value="B">B - Non Pemerintah</option></select><label>⭐ Poin Otomatis</label><input type="text" id="autoPoints" readonly style="background:var(--border);"><label>📸 Foto Bukti</label><input type="file" id="proofImage" accept="image/*"><div id="previewImg"></div><button type="submit"><i class="fas fa-paper-plane"></i> Kirim ke Verifikasi</button></form></div>
+      <div class="card"><h3><i class="fas fa-clock"></i> ⏳ Pengajuan Menunggu Verifikasi</h3><div id="pendingStatusList"></div></div>
     </div>
 
-    <div id="achievementPage" class="hidden-page">
-      <div class="card">
-        <div class="flex-between" style="margin-bottom: 1rem;">
-          <h3><i class="fas fa-flag-checkered"></i> 🎯 Misi & Quest</h3>
-          <div class="level-tag"><i class="fas fa-chart-line"></i> Total Bonus: <span id="totalBonusPoints">0</span> poin</div>
-        </div>
-        <div id="questList"></div>
-      </div>
-      <div class="card">
-        <h3><i class="fas fa-chart-simple"></i> Statistik Achievement</h3>
-        <div class="flex-between">
-          <div>🏆 Quest Selesai: <strong id="completedQuests">0</strong>/5</div>
-          <div>🎁 Bonus Poin: <strong id="totalBonusPoints2">0</strong></div>
-        </div>
-      </div>
-    </div>
+    <div id="achievementPage" class="hidden-page"><div class="card"><h3><i class="fas fa-flag-checkered"></i> 🎯 Misi & Quest</h3><div id="questList"></div></div><div class="card"><h3><i class="fas fa-chart-simple"></i> Statistik Achievement</h3><div class="flex-between"><div>🏆 Quest Selesai: <strong id="completedQuests">0</strong>/5</div><div>🎁 Bonus Poin: <strong id="totalBonusPoints2">0</strong></div></div></div></div>
 
-    <div id="historyPage" class="hidden-page">
-      <div class="card">
-        <div class="flex-between" style="margin-bottom: 1rem;">
-          <h3><i class="fas fa-history"></i> Riwayat Prestasi</h3>
-          <div class="level-tag" id="historyCount">0 item</div>
-        </div>
-        <div class="filter-bar">
-          <select id="historyFilter" style="width: auto;">
-            <option value="all">📋 Semua</option>
-            <option value="approved">✅ Prestasi Disetujui</option>
-            <option value="quest">🎯 Bonus Quest</option>
-          </select>
-          <input type="text" id="historySearch" placeholder="🔍 Cari prestasi..." style="width: 200px;">
-        </div>
-        <div id="historyList" style="max-height: 500px; overflow-y: auto;"></div>
-      </div>
-    </div>
+    <div id="historyPage" class="hidden-page"><div class="card"><h3><i class="fas fa-filter"></i> Filter Riwayat</h3><div class="filter-bar"><select id="historyFilter"><option value="all">📋 Semua</option><option value="approved">✅ Disetujui</option><option value="quest">🎯 Bonus Quest</option></select><input type="text" id="historySearch" placeholder="🔍 Cari prestasi..."></div></div><div class="card"><h3><i class="fas fa-history"></i> Riwayat Prestasi Disetujui</h3><div id="historyList"></div></div></div>
   </div>
 
   <!-- ADMIN PANEL -->
   <div id="adminPanel" class="hidden-page fade-transition">
     <div class="flex-between"><h2>Admin POINT+</h2><button id="logoutAdminBtn" class="logout-btn">Keluar Admin</button></div>
-    <div class="dashboard-grid">
-      <div class="card"><h3>Buat Akun Siswa</h3>
-        <form id="createStudentForm"><input type="text" id="newStudentName" placeholder="Nama" required><input type="text" id="newStudentCode" placeholder="Kode" required><input type="password" id="newStudentPassword" placeholder="Password" required><button type="submit" style="width:100%; margin-top:10px;">Buat Akun</button></form>
-        <div id="createResult"></div><button id="exportPDFBtn" class="btn-warning" style="width:100%; margin-top:10px;">Export PDF</button>
-      </div>
-      <div class="card"><h3>Overview Poin</h3><canvas id="adminChart"></canvas>
-        <div class="flex-between" style="margin-top:1rem;"><span>Hari ini: <strong id="todayTotal">0</strong></span><span>Bulan ini: <strong id="monthTotal">0</strong></span><span>Tahun ini: <strong id="yearTotal">0</strong></span></div>
-      </div>
-    </div>
+    <div class="dashboard-grid"><div class="card"><h3>Buat Akun Siswa</h3><form id="createStudentForm"><input type="text" id="newStudentName" placeholder="Nama" required><input type="text" id="newStudentCode" placeholder="Kode" required><input type="password" id="newStudentPassword" placeholder="Password" required><button type="submit" style="width:100%; margin-top:10px;">Buat Akun</button></form><div id="createResult"></div><button id="exportPDFBtn" class="btn-warning" style="width:100%; margin-top:10px;">Export PDF</button></div><div class="card"><h3>Overview Poin</h3><canvas id="adminChart"></canvas><div class="flex-between" style="margin-top:1rem;"><span>📅 Hari ini: <strong id="todayTotal">0</strong></span><span>📆 Bulan ini: <strong id="monthTotal">0</strong></span><span>🗓️ Tahun ini: <strong id="yearTotal">0</strong></span></div></div></div>
     <div class="card"><h3>Verifikasi Poin (Klik gambar untuk zoom)</h3><div id="pendingList"></div></div>
-    <div class="card"><h3><i class="fas fa-users"></i> Daftar Semua Siswa (Kode & Password)</h3><div id="allStudentsList" style="overflow-x: auto;"></div></div>
+    <div class="card"><h3><i class="fas fa-users"></i> Daftar Semua Siswa & Detail Prestasi</h3><div id="allStudentsList" style="overflow-x: auto;"></div></div>
   </div>
 </div>
 
 <footer class="footer">
-  ©2026 Digital Electronic Studio (DES), All Rights Reserved. | v0.5.0
+  ©2026 Digital Electronic Studio (DES), All Rights Reserved. | v1.0.0
 </footer>
 
-<!-- Modal Pilih Prestasi -->
+<!-- MODAL ACHIEVEMENT WITH TABLE -->
 <div id="achievementModal" class="modal">
   <div class="modal-content">
     <h3><i class="fas fa-trophy"></i> Pilih Prestasi</h3>
-    <input type="text" id="achievementSearch" class="search-box" placeholder="🔍 Cari prestasi..." autocomplete="off">
-    <div id="achievementGrid" class="achievement-grid"></div>
+    <input type="text" id="achievementSearch" class="search-box" placeholder="🔍 Cari prestasi...">
+    <div style="overflow-x: auto; max-height: 60vh;">
+      <table class="achievement-table" id="achievementTable">
+        <thead>
+          <tr><th>Kode</th><th>Nama Prestasi</th><th>Grade A</th><th>Grade B</th></tr>
+        </thead>
+        <tbody id="achievementTableBody"></tbody>
+      </table>
+    </div>
     <button id="closeAchievementModal" class="btn" style="margin-top: 1rem;">Tutup</button>
   </div>
 </div>
 
+<div id="studentDetailModal" class="modal"><div class="modal-content"><h3 id="modalStudentName">Detail Prestasi Siswa</h3><div id="modalStudentPrestasiList" style="max-height:60vh; overflow-y:auto;"></div><button id="closeStudentModal" class="btn" style="margin-top:1rem;">Tutup</button></div></div>
 <button id="resetFabBtn" class="reset-fab" style="display: none;"><i class="fas fa-trash-alt"></i></button>
 <div id="resetModal" class="modal"><div class="modal-content"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--warning);"></i><h3>⚠️ Hapus Semua Data?</h3><p>Tindakan tidak dapat dibatalkan!</p><div class="flex-between" style="justify-content: center; gap: 1rem;"><button id="modalCancelBtn" class="btn">Batal</button><button id="modalConfirmBtn" class="btn-danger">Hapus</button></div></div></div>
 
@@ -530,56 +406,27 @@
   };
   // ====================================================================
 
-  // HILANGKAN STARTUP SETELAH 2 DETIK
-  setTimeout(() => {
-    const startup = document.getElementById('startupOverlay');
-    if(startup) {
-      startup.style.opacity = '0';
-      setTimeout(() => startup.remove(), 1000);
-    }
-  }, 2000);
+  setTimeout(() => { const startup = document.getElementById('startupOverlay'); if(startup) { startup.style.opacity = '0'; setTimeout(() => startup.remove(), 1000); } }, 2000);
 
   let db = null, firestoreEnabled = false;
   try { 
     if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "AIzaSyDummyExample123456789") { 
       firebase.initializeApp(firebaseConfig); db = firebase.firestore(); firestoreEnabled = true; 
-      document.getElementById('syncIndicatorInline').innerHTML = '☁️ Cloud ON';
-      document.getElementById('syncIndicatorInline').style.background = 'var(--success)';
-      document.getElementById('syncIndicatorInline').style.color = 'white';
-      document.getElementById('syncIndicatorInline').style.padding = '0.2rem 0.5rem';
-      document.getElementById('syncIndicatorInline').style.borderRadius = '1rem';
+      document.getElementById('syncIndicator').innerHTML = '☁️ Cloud ON';
+      document.getElementById('syncIndicator').style.background = 'var(--success)';
     } else throw new Error('Config belum diisi');
   } catch(e) { 
-    document.getElementById('syncIndicatorInline').innerHTML = '💾 Local Only'; 
-    document.getElementById('syncIndicatorInline').style.background = 'var(--danger)';
-    document.getElementById('syncIndicatorInline').style.color = 'white';
+    document.getElementById('syncIndicator').innerHTML = '💾 Local Only';
+    document.getElementById('syncIndicator').style.background = 'var(--danger)';
     firestoreEnabled = false; 
   }
 
-  // SLIDE NAV MENU FUNCTIONS
-  function openMenu() {
-    document.getElementById('slideNav').classList.add('open');
-    document.getElementById('menuOverlay').classList.add('show');
-  }
-  function closeMenu() {
-    document.getElementById('slideNav').classList.remove('open');
-    document.getElementById('menuOverlay').classList.remove('show');
-  }
+  // SLIDE MENU FUNCTIONS
+  function openMenu() { document.getElementById('slideMenu').classList.add('open'); document.getElementById('menuOverlay').classList.add('show'); }
+  function closeMenu() { document.getElementById('slideMenu').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('show'); }
   document.getElementById('menuIcon')?.addEventListener('click', openMenu);
   document.getElementById('closeMenuBtn')?.addEventListener('click', closeMenu);
   document.getElementById('menuOverlay')?.addEventListener('click', closeMenu);
-
-  // Fungsi untuk toggle menu admin di slide nav
-  function toggleAdminMenuItem() {
-    const adminMenuItem = document.getElementById('menuAdminSlide');
-    if(adminMenuItem) {
-      if(isAdminMode) {
-        adminMenuItem.style.display = 'none';
-      } else {
-        adminMenuItem.style.display = 'flex';
-      }
-    }
-  }
 
   // MASTER DATA PRESTASI LENGKAP
   const achievementDB = {
@@ -654,48 +501,8 @@
   let currentStudent = null, isAdminMode = false;
   let studentChart = null, adminChart = null;
 
-  // MODAL ACHIEVEMENT
-  window.openAchievementModal = function() {
-    renderAchievementGrid();
-    document.getElementById('achievementModal').style.display = 'flex';
-  }
-  function renderAchievementGrid() {
-    const search = document.getElementById('achievementSearch')?.value.toLowerCase() || '';
-    const grid = document.getElementById('achievementGrid');
-    const filteredCodes = Object.keys(achievementDB).filter(code => achievementDB[code].name.toLowerCase().includes(search) || code.toLowerCase().includes(search));
-    grid.innerHTML = filteredCodes.map(code => `<div class="achievement-option" data-code="${code}"><strong>${code}</strong> - ${achievementDB[code].name}</div>`).join('');
-    document.querySelectorAll('.achievement-option').forEach(opt => {
-      opt.addEventListener('click', () => {
-        const code = opt.dataset.code;
-        document.getElementById('achievementCode').value = code;
-        document.getElementById('selectedAchievementDisplay').value = `${code} - ${achievementDB[code].name.substring(0, 50)}`;
-        document.getElementById('achievementDesc').innerHTML = achievementDB[code].name;
-        const grade = document.getElementById('gradeSelect').value;
-        document.getElementById('autoPoints').value = `${achievementDB[code].points[grade]} poin`;
-        document.getElementById('achievementModal').style.display = 'none';
-      });
-    });
-  }
-  document.getElementById('achievementSearch')?.addEventListener('input', renderAchievementGrid);
-  document.getElementById('closeAchievementModal')?.addEventListener('click', () => document.getElementById('achievementModal').style.display = 'none');
-
-  async function deletePendingPoint(pointId) {
-    if(confirm('⚠️ Apakah Anda yakin ingin menghapus pengajuan ini? Tindakan tidak dapat dibatalkan.')) {
-      const pointIndex = pointsData.findIndex(p => p.id === pointId);
-      if(pointIndex !== -1 && pointsData[pointIndex].status === 'pending') {
-        pointsData.splice(pointIndex, 1);
-        await saveToCloud();
-        renderAllStudent();
-        if(isAdminMode) renderAdminDashboard();
-        alert('✅ Pengajuan berhasil dihapus!');
-      } else {
-        alert('❌ Pengajuan tidak dapat dihapus karena sudah diverifikasi.');
-      }
-    }
-  }
-
   async function saveToCloud() { 
-    const data = { students, points: pointsData, quests: studentQuests, updatedAt: new Date() };
+    const data = { students, points: pointsData, quests: studentQuests }; 
     if(firestoreEnabled) try{ await db.collection('master').doc('data').set(data); } catch(e){} 
     localStorage.setItem('pointplus_backup', JSON.stringify(data)); 
   }
@@ -705,365 +512,208 @@
     const local=localStorage.getItem('pointplus_backup'); if(local){ const d=JSON.parse(local); students=d.students||[]; pointsData=d.points||[]; studentQuests=d.quests||{}; renderLeaderboard(); }
   }
 
-  function getTotalPoints(studentId) { return pointsData.filter(p=>p.studentId===studentId && p.status==='approved' && !p.isBonus).reduce((s,p)=>s+p.value,0); }
-  function getBonusPoints(studentId) { return pointsData.filter(p=>p.studentId===studentId && p.isBonus===true).reduce((s,p)=>s+p.value,0); }
-  function getLevel(total) { if(total>=500) return { name:"Legenda", next:null, progress:100 }; if(total>=300) return { name:"Master", next:500, progress:(total-300)/200*100 }; if(total>=150) return { name:"Perak", next:300, progress:(total-150)/150*100 }; if(total>=50) return { name:"Perunggu", next:150, progress:(total-50)/100*100 }; return { name:"Pemula", next:50, progress:total/50*100 }; }
-
-  function getStudentBadges(studentId) {
-    const studentQuestData = studentQuests[studentId] || {};
-    return quests.filter(q => studentQuestData[q.id]?.completed).map(q => q.badge);
-  }
+  function getTotalPoints(sid) { return pointsData.filter(p=>p.studentId===sid && p.status==='approved' && !p.isBonus).reduce((s,p)=>s+p.value,0); }
+  function getBonusPoints(sid) { return pointsData.filter(p=>p.studentId===sid && p.isBonus===true).reduce((s,p)=>s+p.value,0); }
+  function getLevel(total) { if(total>=500) return { name:"Legenda", progress:100 }; if(total>=300) return { name:"Master", progress:(total-300)/200*100 }; if(total>=150) return { name:"Perak", progress:(total-150)/150*100 }; if(total>=50) return { name:"Perunggu", progress:(total-50)/100*100 }; return { name:"Pemula", progress:total/50*100 }; }
 
   function renderLeaderboard() {
-    const leaderboard = students.map(s => ({ ...s, totalPoints: getTotalPoints(s.id), badges: getStudentBadges(s.id) })).sort((a,b) => b.totalPoints - a.totalPoints).slice(0,5);
-    const leaderboardDiv = document.getElementById('leaderboardList');
-    if(leaderboard.length === 0) { leaderboardDiv.innerHTML = '<div style="text-align:center; padding:1rem;">✨ Belum ada siswa terdaftar ✨</div>'; return; }
-    leaderboardDiv.innerHTML = leaderboard.map((s, idx) => {
-      let rankClass = 'rank-normal';
-      let medalIcon = '';
-      if(idx === 0) { rankClass = 'rank-gold'; medalIcon = '<i class="fas fa-crown"></i> '; }
-      else if(idx === 1) { rankClass = 'rank-silver'; medalIcon = '<i class="fas fa-medal"></i> '; }
-      else if(idx === 2) { rankClass = 'rank-bronze'; medalIcon = '<i class="fas fa-medal"></i> '; }
-      const badgeHtml = s.badges.length ? s.badges.map(b => `<span class="level-tag" style="background: var(--gold); font-size:0.65rem;">${b}</span>`).join('') : '<span class="level-tag" style="font-size:0.65rem;">Belum ada badge</span>';
-      const level = getLevel(s.totalPoints);
-      const progressPercent = level.progress;
-      return `<div class="leaderboard-item-new"><div class="rank-medal ${rankClass}">${medalIcon}${idx+1}</div><div class="leaderboard-detail"><div class="leaderboard-name-new">${s.name}</div><div class="leaderboard-points-new"><i class="fas fa-star"></i> ${s.totalPoints} poin • Level ${level.name}</div><div class="leaderboard-progress"><div class="leaderboard-progress-bar" style="width: ${progressPercent}%;"></div></div><div class="leaderboard-badges-new">${badgeHtml}</div></div></div>`;
+    const top5 = students.map(s=>({...s, pts:getTotalPoints(s.id)})).sort((a,b)=>b.pts-a.pts).slice(0,5);
+    const container = document.getElementById('leaderboardList');
+    if(top5.length===0) { container.innerHTML='<div style="text-align:center; padding:1rem;">✨ Belum ada siswa</div>'; return; }
+    container.innerHTML = top5.map((s,i)=>{
+      let rankClass='rank-normal', medal='';
+      if(i===0) { rankClass='rank-gold'; medal='🥇 '; }
+      else if(i===1) { rankClass='rank-silver'; medal='🥈 '; }
+      else if(i===2) { rankClass='rank-bronze'; medal='🥉 '; }
+      const level = getLevel(s.pts);
+      return `<div class="leaderboard-item-new"><div class="rank-medal ${rankClass}">${medal}${i+1}</div><div class="leaderboard-detail"><div class="leaderboard-name-new">${s.name}</div><div class="leaderboard-points-new">⭐ ${s.pts} poin • Level ${level.name}</div><div class="leaderboard-progress"><div class="leaderboard-progress-bar" style="width:${level.progress}%"></div></div></div></div>`;
     }).join('');
   }
 
-  function updateQuests(studentId) {
-    if(!studentQuests[studentId]) studentQuests[studentId] = {};
-    const studentPoints = pointsData.filter(p=>p.studentId===studentId && p.status==='approved' && !p.isBonus);
+  function updateQuests(sid) {
+    if(!studentQuests[sid]) studentQuests[sid] = {};
+    const studentPoints = pointsData.filter(p=>p.studentId===sid && p.status==='approved' && !p.isBonus);
     const approvedCount = studentPoints.length;
     const totalPoints = studentPoints.reduce((s,p)=>s+p.value,0);
     const thisMonth = studentPoints.filter(p=>new Date(p.createdAt).getMonth()===new Date().getMonth()).length;
     const hasNational = studentPoints.some(p=>p.achievementCode?.startsWith('A.') && parseInt(p.achievementCode.split('.')[1]) <= 14);
     const hasKetua = studentPoints.some(p=>p.achievementCode === 'B.01');
-    let anyCompleted = false;
-    for(let q of quests) {
-      let progress = 0, completed = false;
-      if(q.id === 'quest1') { progress = approvedCount; completed = approvedCount >= q.target; }
-      else if(q.id === 'quest2') { progress = totalPoints; completed = totalPoints >= q.target; }
-      else if(q.id === 'quest3') { progress = hasNational ? 1 : 0; completed = hasNational; }
-      else if(q.id === 'quest4') { progress = thisMonth; completed = thisMonth >= q.target; }
-      else if(q.id === 'quest5') { progress = hasKetua ? 1 : 0; completed = hasKetua; }
-      if(completed && (!studentQuests[studentId][q.id]?.completed)) {
-        pointsData.push({ id: Date.now()+'-reward', studentId, achievementCode: 'QUEST', title: `🎯 ${q.name}`, value: q.reward, status: 'approved', createdAt: new Date().toISOString(), isBonus: true });
-        anyCompleted = true;
+    let anyCompleted=false;
+    for(let q of quests){
+      let progress=0, completed=false;
+      if(q.id==='quest1'){ progress=approvedCount; completed=approvedCount>=q.target; }
+      else if(q.id==='quest2'){ progress=totalPoints; completed=totalPoints>=q.target; }
+      else if(q.id==='quest3'){ progress=hasNational?1:0; completed=hasNational; }
+      else if(q.id==='quest4'){ progress=thisMonth; completed=thisMonth>=q.target; }
+      else if(q.id==='quest5'){ progress=hasKetua?1:0; completed=hasKetua; }
+      if(completed && (!studentQuests[sid][q.id]?.completed)){
+        pointsData.push({ id:Date.now()+'-reward', studentId:sid, achievementCode:'QUEST', title:`🎯 ${q.name}`, value:q.reward, status:'approved', createdAt:new Date().toISOString(), isBonus:true });
+        anyCompleted=true;
       }
-      studentQuests[studentId][q.id] = { progress, completed, claimed: completed || false };
+      studentQuests[sid][q.id] = { progress, completed };
     }
     if(anyCompleted) saveToCloud();
   }
 
-  function fadeTransition(element, show) {
-    element.style.opacity = '0';
-    setTimeout(() => {
-      if(show) element.classList.remove('hidden-page');
-      else element.classList.add('hidden-page');
-      setTimeout(() => { element.style.opacity = '1'; }, 50);
-    }, 200);
+  // ACHIEVEMENT MODAL WITH TABLE
+  function openAchievementModal() {
+    renderAchievementTable();
+    document.getElementById('achievementModal').style.display = 'flex';
   }
+  
+  function renderAchievementTable() {
+    const search = document.getElementById('achievementSearch')?.value.toLowerCase() || '';
+    const tbody = document.getElementById('achievementTableBody');
+    const filteredCodes = Object.keys(achievementDB).filter(code => 
+      achievementDB[code].name.toLowerCase().includes(search) || code.toLowerCase().includes(search)
+    );
+    tbody.innerHTML = filteredCodes.map(code => {
+      const ach = achievementDB[code];
+      return `<tr data-code="${code}">
+        <td><strong>${code}</strong></td>
+        <td>${ach.name}</td>
+        <td>${ach.points.A} poin</td>
+        <td>${ach.points.B} poin</td>
+      </tr>`;
+    }).join('');
+    
+    document.querySelectorAll('#achievementTableBody tr').forEach(row => {
+      row.addEventListener('click', () => {
+        const code = row.dataset.code;
+        document.getElementById('achievementCode').value = code;
+        document.getElementById('selectedAchievementDisplay').value = `${code} - ${achievementDB[code].name}`;
+        document.getElementById('achievementModal').style.display = 'none';
+        updateAutoPoints();
+      });
+    });
+  }
+  
+  function updateAutoPoints() { 
+    const code = document.getElementById('achievementCode').value; 
+    const grade = document.getElementById('gradeSelect').value; 
+    if(code && achievementDB[code]) document.getElementById('autoPoints').value = `${achievementDB[code].points[grade]} poin`; 
+  }
+  
+  document.getElementById('achievementSearch')?.addEventListener('input', renderAchievementTable);
+  document.getElementById('closeAchievementModal')?.addEventListener('click', () => document.getElementById('achievementModal').style.display = 'none');
 
-  function renderAllStudent() {
+  function renderAllStudent(){
     if(!currentStudent) return;
     updateQuests(currentStudent.id);
-    const totalPoints = getTotalPoints(currentStudent.id);
-    const level = getLevel(totalPoints);
+    document.getElementById('helloStudentName').innerHTML = `Hello, ${currentStudent.name}! 👋`;
+    const total = getTotalPoints(currentStudent.id), level = getLevel(total);
     document.getElementById('studentLevel').innerHTML = level.name;
-    document.getElementById('totalPointsDisplay').innerHTML = `${totalPoints} poin`;
+    document.getElementById('totalPointsDisplay').innerHTML = `${total} poin`;
     document.getElementById('levelProgressBar').style.width = `${level.progress}%`;
-    document.getElementById('nextLevelInfo').innerHTML = level.next ? `Butuh ${level.next-totalPoints} poin lagi ke Level ${level.next===150?'Perunggu':level.next===300?'Perak':level.next===500?'Master':'Legenda'}` : `🏆 MAX LEVEL!`;
+    document.getElementById('nextLevelInfo').innerHTML = level.name==="Legenda" ? "🏆 MAX LEVEL!" : `Butuh ${level.name==='Pemula'?50-total:level.name==='Perunggu'?150-total:level.name==='Perak'?300-total:500-total} poin lagi`;
     
     const approved = pointsData.filter(p=>p.studentId===currentStudent.id && p.status==='approved' && !p.isBonus);
     const today = approved.filter(p=>new Date(p.createdAt).toDateString()===new Date().toDateString()).reduce((s,p)=>s+p.value,0);
     const month = approved.filter(p=>new Date(p.createdAt).getMonth()===new Date().getMonth()).reduce((s,p)=>s+p.value,0);
     const year = approved.filter(p=>new Date(p.createdAt).getFullYear()===new Date().getFullYear()).reduce((s,p)=>s+p.value,0);
-    if(studentChart) { studentChart.data.datasets[0].data = [today,month,year]; studentChart.update(); }
-    else { studentChart = new Chart(document.getElementById('studentChart'), { type: 'bar', data: { labels: ['Hari ini','Bulan ini','Tahun ini'], datasets: [{ label: 'Poin Prestasi', data: [today,month,year], backgroundColor: '#3b82f6' }] } }); }
+    if(studentChart) studentChart.data.datasets[0].data=[today,month,year], studentChart.update();
+    else studentChart = new Chart(document.getElementById('studentChart'),{ type:'bar', data:{ labels:['Hari ini','Bulan ini','Tahun ini'], datasets:[{ label:'Poin', data:[today,month,year], backgroundColor:'#3b82f6' }] } });
     
-    const studentQuestData = studentQuests[currentStudent.id] || {};
-    const earnedBadges = quests.filter(q => studentQuestData[q.id]?.completed).map(q => `<div class="level-tag" style="background: var(--gold);"><i class="fas ${q.icon}"></i> ${q.badge}</div>`);
-    earnedBadges.push(`<div class="level-tag" style="background: var(--success);"><i class="fas fa-chart-line"></i> Level ${level.name}</div>`);
-    document.getElementById('badgesList').innerHTML = earnedBadges.length ? earnedBadges.join('') : '<div class="level-tag">✨ Selesaikan quest untuk dapat lencana!</div>';
+    const recentPoints = [...approved].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,10);
+    const tableBody = document.querySelector('#studentPrestasiTable tbody');
+    if(recentPoints.length) tableBody.innerHTML = recentPoints.map(p=>`<tr><td>${p.achievementCode}</td><td>${p.title}</td><td>${new Date(p.createdAt).toLocaleDateString()}</td><td><span class="status-approved">✅ Disetujui</span></td></tr>`).join('');
+    else tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Belum ada prestasi</td></tr>';
     
-    const questHtml = quests.map(q => {
-      const data = studentQuestData[q.id] || { progress: 0, completed: false };
-      const progressPercent = Math.min(100, (data.progress / q.target) * 100);
-      return `<div class="quest-card-improved">
-        <div class="quest-header">
-          <div class="quest-title"><i class="fas ${q.icon}"></i> ${q.name}</div>
-          ${data.completed ? '<span class="quest-badge-earned"><i class="fas fa-check-circle"></i> Selesai +' + q.reward + ' poin</span>' : '<span class="quest-badge-pending"><i class="fas fa-hourglass-half"></i> Target: ' + q.target + '</span>'}
-        </div>
-        <div class="quest-desc">${q.desc}</div>
-        <div class="quest-progress-improved"><div class="quest-progress-fill" style="width: ${progressPercent}%;"></div></div>
-        <div class="quest-footer">
-          <span>📊 Progress: ${data.progress}/${q.target}</span>
-          <span class="quest-reward"><i class="fas fa-gift"></i> Reward: +${q.reward} poin</span>
-        </div>
-      </div>`;
-    }).join('');
-    document.getElementById('questList').innerHTML = questHtml;
-    const completedCount = quests.filter(q => studentQuestData[q.id]?.completed).length;
-    document.getElementById('completedQuests').innerHTML = `${completedCount}/5`;
-    const bonusPoints = getBonusPoints(currentStudent.id);
-    document.getElementById('totalBonusPoints').innerHTML = bonusPoints;
-    document.getElementById('totalBonusPoints2').innerHTML = bonusPoints;
+    const sq = studentQuests[currentStudent.id]||{};
+    document.getElementById('badgesList').innerHTML = quests.filter(q=>sq[q.id]?.completed).map(q=>`<span class="badge">${q.badge}</span>`).join('') || '<span>✨ Belum ada lencana</span>';
+    document.getElementById('questList').innerHTML = quests.map(q=>{ const data=sq[q.id]||{progress:0,completed:false}; const percent=Math.min(100,(data.progress/q.target)*100); return `<div class="quest-card-improved"><div class="quest-header"><div class="quest-title"><i class="fas ${q.icon}"></i> ${q.name}</div>${data.completed?'<span class="quest-badge-earned">✅ Selesai +'+q.reward+' poin</span>':'<span class="quest-badge-pending">🎯 Target: '+q.target+'</span>'}</div><div class="quest-desc">${q.desc}</div><div class="quest-progress-improved"><div class="quest-progress-fill" style="width:${percent}%"></div></div><div class="quest-footer"><span>📊 Progress: ${data.progress}/${q.target}</span><span class="quest-reward"><i class="fas fa-gift"></i> +${q.reward} poin</span></div></div>`; }).join('');
+    document.getElementById('completedQuests').innerHTML = `${quests.filter(q=>sq[q.id]?.completed).length}/5`;
+    document.getElementById('totalBonusPoints2').innerHTML = getBonusPoints(currentStudent.id);
     
-    const pendingPoints = pointsData.filter(p=>p.studentId===currentStudent.id && p.status==='pending');
-    document.getElementById('pendingStatusList').innerHTML = pendingPoints.length ? pendingPoints.map(p=>`<div class="pending-item"><div class="flex-between"><strong>📌 ${p.achievementCode} - ${p.title}</strong> <span class="level-tag" style="background:#f59e0b;">⏳ Menunggu</span></div><div>🏆 ${p.value} poin • 📅 ${new Date(p.createdAt).toLocaleDateString('id-ID')}</div>${p.imageBase64 ? `<a href="${p.imageBase64}" data-lightbox="pending"><img src="${p.imageBase64}" style="max-width:50px; border-radius:6px; margin-top:5px;"></a>` : ''}<div style="margin-top:8px;"><button class="delete-pending-btn" data-id="${p.id}" style="background: var(--danger); color: white; border: none; padding: 4px 12px; border-radius: 1rem; font-size: 0.7rem; cursor: pointer;"><i class="fas fa-trash-alt"></i> Hapus Pengajuan</button></div></div>`).join('') : '<div style="text-align:center; padding:1rem;">✅ Tidak ada pengajuan yang menunggu verifikasi</div>';
-    
-    document.querySelectorAll('.delete-pending-btn').forEach(btn => {
-      btn.removeEventListener('click', handleDeleteClick);
-      btn.addEventListener('click', handleDeleteClick);
-    });
+    const pending = pointsData.filter(p=>p.studentId===currentStudent.id && p.status==='pending');
+    document.getElementById('pendingStatusList').innerHTML = pending.length ? pending.map(p=>`<div class="pending-item"><div class="flex-between"><strong>📌 ${p.achievementCode} - ${p.title}</strong><span class="badge" style="background:#f59e0b;">⏳ Menunggu</span></div><div>🏆 ${p.value} poin • ${new Date(p.createdAt).toLocaleDateString()}</div>${p.imageBase64?`<a href="${p.imageBase64}" data-lightbox="pending"><img src="${p.imageBase64}" class="preview-img"></a>`:''}<div><button class="delete-pending-btn" data-id="${p.id}"><i class="fas fa-trash-alt"></i> Hapus</button></div></div>`).join('') : '<div style="text-align:center; padding:1rem;">✅ Tidak ada pengajuan</div>';
+    document.querySelectorAll('.delete-pending-btn').forEach(btn=>btn.addEventListener('click',async()=>{ const idx=pointsData.findIndex(p=>p.id===btn.dataset.id); if(idx!==-1 && pointsData[idx].status==='pending'){ pointsData.splice(idx,1); await saveToCloud(); renderAllStudent(); alert('Pengajuan dihapus'); } }));
     
     const allHistory = pointsData.filter(p=>p.studentId===currentStudent.id && p.status==='approved').sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-    const filter = document.getElementById('historyFilter')?.value || 'all';
-    const search = document.getElementById('historySearch')?.value.toLowerCase() || '';
+    const filter = document.getElementById('historyFilter')?.value||'all';
+    const search = document.getElementById('historySearch')?.value.toLowerCase()||'';
     let filtered = allHistory;
-    if(filter === 'approved') filtered = allHistory.filter(p=>!p.isBonus);
-    if(filter === 'quest') filtered = allHistory.filter(p=>p.isBonus);
-    if(search) filtered = filtered.filter(p=>p.title.toLowerCase().includes(search) || (p.achievementCode && p.achievementCode.toLowerCase().includes(search)));
-    document.getElementById('historyCount').innerHTML = `${filtered.length} item`;
-    document.getElementById('historyList').innerHTML = filtered.length ? filtered.map(p=>`<div class="history-item">
-      <div class="history-header">
-        <div class="history-title"><strong>${p.achievementCode === 'QUEST' ? '🎯' : '🏆'} ${p.title}</strong></div>
-        <div class="history-status ${p.isBonus ? 'status-quest' : 'status-approved'}">${p.isBonus ? '🎁 Bonus Quest' : '✅ Disetujui'}</div>
-      </div>
-      <div class="history-details">
-        <span><i class="fas fa-star"></i> ${p.value} poin</span>
-        <span><i class="fas fa-calendar-alt"></i> ${new Date(p.createdAt).toLocaleDateString('id-ID')}</span>
-        ${p.achievementCode && p.achievementCode !== 'QUEST' ? `<span><i class="fas fa-tag"></i> Kode: ${p.achievementCode}</span>` : ''}
-      </div>
-      ${p.imageBase64 ? `<a href="${p.imageBase64}" data-lightbox="history"><img src="${p.imageBase64}" class="preview-img"></a>` : ''}
-    </div>`).join('') : '<div style="text-align:center; padding:2rem;">✨ Belum ada riwayat prestasi disetujui</div>';
-    if (typeof lightbox !== 'undefined') lightbox.option({ resizeDuration: 200 });
+    if(filter==='approved') filtered = allHistory.filter(p=>!p.isBonus);
+    if(filter==='quest') filtered = allHistory.filter(p=>p.isBonus);
+    if(search) filtered = filtered.filter(p=>p.title.toLowerCase().includes(search));
+    document.getElementById('historyList').innerHTML = filtered.length ? filtered.map(p=>`<div class="history-item"><div class="history-header"><div class="history-title"><strong>${p.achievementCode==='QUEST'?'🎯':'🏆'} ${p.title}</strong></div><div class="history-status ${p.isBonus?'status-quest':'status-approved'}">${p.isBonus?'🎁 Bonus Quest':'✅ Disetujui'}</div></div><div class="history-details"><span>⭐ ${p.value} poin</span><span>📅 ${new Date(p.createdAt).toLocaleDateString()}</span></div>${p.imageBase64?`<a href="${p.imageBase64}" data-lightbox="history"><img src="${p.imageBase64}" class="preview-img"></a>`:''}</div>`).join('') : '<div style="text-align:center; padding:2rem;">✨ Belum ada riwayat</div>';
+    if(typeof lightbox!=='undefined') lightbox.option({resizeDuration:200});
   }
-
-  function handleDeleteClick(e) {
-    const pointId = e.currentTarget.getAttribute('data-id');
-    deletePendingPoint(pointId);
-  }
-
-  async function renderAdminDashboard() {
+  
+  async function renderAdminDashboard(){
     if(!isAdminMode) return;
     const approved = pointsData.filter(p=>p.status==='approved' && !p.isBonus);
     document.getElementById('todayTotal').innerText = approved.filter(p=>new Date(p.createdAt).toDateString()===new Date().toDateString()).reduce((s,p)=>s+p.value,0);
     document.getElementById('monthTotal').innerText = approved.filter(p=>new Date(p.createdAt).getMonth()===new Date().getMonth()).reduce((s,p)=>s+p.value,0);
     document.getElementById('yearTotal').innerText = approved.filter(p=>new Date(p.createdAt).getFullYear()===new Date().getFullYear()).reduce((s,p)=>s+p.value,0);
     const monthData = new Array(12).fill(0); approved.forEach(p=>{ const d=new Date(p.createdAt); if(d.getFullYear()===new Date().getFullYear()) monthData[d.getMonth()]+=p.value; });
-    if(adminChart) { adminChart.data.datasets[0].data=monthData; adminChart.update(); }
-    else { adminChart = new Chart(document.getElementById('adminChart'), { type: 'line', data: { labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'], datasets: [{ label: 'Total Poin', data: monthData, borderColor: '#3b82f6' }] } }); }
+    if(adminChart) adminChart.data.datasets[0].data=monthData, adminChart.update();
+    else adminChart = new Chart(document.getElementById('adminChart'),{ type:'line', data:{ labels:['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'], datasets:[{ label:'Total Poin', data:monthData, borderColor:'#3b82f6' }] } });
     const pending = pointsData.filter(p=>p.status==='pending');
-    document.getElementById('pendingList').innerHTML = pending.length ? pending.map(p=>{ const s=students.find(s=>s.id===p.studentId); return `<div class="card" style="margin-bottom:1rem; padding:1rem;"><div><strong>${s?.name}</strong> - ${p.achievementCode} (${p.title}) - ${p.value} poin</div>${p.imageBase64?`<a href="${p.imageBase64}" data-lightbox="admin-pending"><img src="${p.imageBase64}" class="preview-img"></a>`:'<div><i>Tanpa lampiran</i></div>'}<div><button class="approve-btn" data-id="${p.id}" style="background:#10b981;">Setujui</button> <button class="reject-btn" data-id="${p.id}" style="background:#ef4444;">Tolak</button></div></div>`; }).join('') : '<div style="padding:1rem; text-align:center;">✅ Semua poin terverifikasi</div>';
+    document.getElementById('pendingList').innerHTML = pending.length ? pending.map(p=>{ const s=students.find(s=>s.id===p.studentId); return `<div class="card" style="margin-bottom:1rem;"><div><strong>${s?.name}</strong> - ${p.achievementCode} (${p.title}) - ${p.value} poin</div>${p.imageBase64?`<a href="${p.imageBase64}" data-lightbox="admin"><img src="${p.imageBase64}" class="preview-img"></a>`:''}<div><button class="approve-btn" data-id="${p.id}" style="background:#10b981;">Setujui</button> <button class="reject-btn" data-id="${p.id}" style="background:#ef4444;">Tolak</button></div></div>`; }).join('') : '<div>✅ Semua terverifikasi</div>';
     document.querySelectorAll('.approve-btn').forEach(btn=>btn.addEventListener('click',async()=>{ let pt=pointsData.find(p=>p.id===btn.dataset.id); if(pt){pt.status='approved'; await saveToCloud(); renderAdminDashboard(); if(currentStudent) renderAllStudent(); renderLeaderboard();} }));
     document.querySelectorAll('.reject-btn').forEach(btn=>btn.addEventListener('click',async()=>{ let pt=pointsData.find(p=>p.id===btn.dataset.id); if(pt){pt.status='rejected'; await saveToCloud(); renderAdminDashboard(); if(currentStudent) renderAllStudent(); renderLeaderboard();} }));
-    const studentsHtml = students.map(s=>{ const total=pointsData.filter(p=>p.studentId===s.id && p.status==='approved' && !p.isBonus).reduce((a,b)=>a+b.value,0); return `<tr><td style="padding:8px;">${s.name}</td><td style="padding:8px;"><code>${s.code}</code></td><td style="padding:8px;"><code>${s.password}</code></td><td style="padding:8px;"><strong>${total}</strong></td><td style="padding:8px;">${pointsData.filter(p=>p.studentId===s.id && p.status==='approved' && !p.isBonus).length}</td><td style="padding:8px;">${pointsData.filter(p=>p.studentId===s.id && p.status==='pending').length}</td>`; }).join('');
-    document.getElementById('allStudentsList').innerHTML = `<table style="width:100%"><thead><tr><th>Nama</th><th>Kode</th><th>Password</th><th>Total Poin</th><th>Prestasi</th><th>Pending</th></tr></thead><tbody>${studentsHtml||'<tr><td colspan="6">Belum ada siswa</td>'}</tbody>}</table>`;
-    if (typeof lightbox !== 'undefined') lightbox.option({ resizeDuration: 200 });
+    const studentsHtml = students.map(s=>{ const total=pointsData.filter(p=>p.studentId===s.id && p.status==='approved' && !p.isBonus).reduce((a,b)=>a+b.value,0); return `<tr><td>${s.name}</td><td><code>${s.code}</code></td><td><code>${s.password}</code></td><td><strong>${total}</strong></td><td><button class="detail-btn" data-id="${s.id}" data-name="${s.name}">📋 Lihat Prestasi</button></td></tr>`; }).join('');
+    document.getElementById('allStudentsList').innerHTML = `<table style="width:100%"><thead><tr><th>Nama</th><th>Kode</th><th>Password</th><th>Total Poin</th><th>Aksi</th></tr></thead><tbody>${studentsHtml||'<tr><td colspan="5">Belum ada siswa</td></tr>'}</tbody></table>`;
+    document.querySelectorAll('.detail-btn').forEach(btn=>btn.addEventListener('click',()=>showStudentDetail(btn.dataset.id, btn.dataset.name)));
+    if(typeof lightbox!=='undefined') lightbox.option({resizeDuration:200});
   }
-
-  async function resetAllData() { students=[]; pointsData=[]; studentQuests={}; await saveToCloud(); alert('✅ Semua data direset!'); if(isAdminMode) renderAdminDashboard(); if(currentStudent) location.reload(); renderLeaderboard(); }
-  async function exportToPDF() { const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.text('LAPORAN POINT+',20,20); doc.text(`Tanggal: ${new Date().toLocaleString()}`,20,30); doc.text(`Total Siswa: ${students.length}`,20,40); doc.save(`POINTPlus_${Date.now()}.pdf`); }
-
-  function showPage(pageId) {
-    document.getElementById('overviewPage').classList.add('hidden-page');
-    document.getElementById('uploadPage').classList.add('hidden-page');
-    document.getElementById('achievementPage').classList.add('hidden-page');
-    document.getElementById('historyPage').classList.add('hidden-page');
-    document.getElementById(pageId).classList.remove('hidden-page');
-    document.querySelectorAll('.student-nav a').forEach(a => a.classList.remove('active'));
-    if(pageId === 'overviewPage') document.getElementById('navOverview').classList.add('active');
-    if(pageId === 'uploadPage') document.getElementById('navUpload').classList.add('active');
-    if(pageId === 'achievementPage') document.getElementById('navAchievement').classList.add('active');
-    if(pageId === 'historyPage') document.getElementById('navHistory').classList.add('active');
-    if(currentStudent) renderAllStudent();
+  
+  function showStudentDetail(sid, sname){
+    const prestasi = pointsData.filter(p=>p.studentId===sid && p.status==='approved').sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    document.getElementById('modalStudentName').innerHTML = `📋 Detail Prestasi: ${sname}`;
+    document.getElementById('modalStudentPrestasiList').innerHTML = prestasi.length ? prestasi.map(p=>`<div style="border-bottom:1px solid var(--border); padding:1rem;"><div><strong>${p.achievementCode}</strong> - ${p.title}</div><div>🏆 ${p.value} poin | 📅 ${new Date(p.createdAt).toLocaleDateString()}</div>${p.imageBase64?`<a href="${p.imageBase64}" data-lightbox="detail-zoom"><img src="${p.imageBase64}" style="max-width:100px; border-radius:8px; margin-top:8px;"></a>`:'<div><i>Tanpa lampiran</i></div>'}</div>`).join('') : '<div style="padding:1rem;">✨ Belum ada prestasi</div>';
+    document.getElementById('studentDetailModal').style.display='flex';
+    if(typeof lightbox!=='undefined') lightbox.option({resizeDuration:200});
   }
-
-  // Navigation
+  
+  async function resetAllData(){ students=[]; pointsData=[]; studentQuests={}; await saveToCloud(); alert('✅ Data direset!'); if(currentStudent) location.reload(); renderLeaderboard(); }
+  async function exportToPDF(){ const {jsPDF}=window.jspdf; const doc=new jsPDF(); doc.text('LAPORAN POINT+',20,20); doc.text(`Tanggal: ${new Date().toLocaleString()}`,20,30); doc.text(`Total Siswa: ${students.length}`,20,40); doc.save(`POINTPlus_${Date.now()}.pdf`); }
+  
+  function showPage(pageId){ ['overviewPage','uploadPage','achievementPage','historyPage'].forEach(p=>document.getElementById(p).classList.add('hidden-page')); document.getElementById(pageId).classList.remove('hidden-page'); document.querySelectorAll('.student-nav a').forEach(a=>a.classList.remove('active')); if(pageId==='overviewPage') document.getElementById('navOverview').classList.add('active'); if(pageId==='uploadPage') document.getElementById('navUpload').classList.add('active'); if(pageId==='achievementPage') document.getElementById('navAchievement').classList.add('active'); if(pageId==='historyPage') document.getElementById('navHistory').classList.add('active'); if(currentStudent) renderAllStudent(); }
+  
+  function switchToPage(page){ 
+    ['loginPage','aboutPage','faqRulesPage','studentPanel','adminPanel'].forEach(p=>{ let el=document.getElementById(p); if(el && el!==page){ el.style.opacity='0'; setTimeout(()=>el.classList.add('hidden-page'),200); } }); 
+    if(page){ setTimeout(()=>{ page.classList.remove('hidden-page'); setTimeout(()=>page.style.opacity='1',50); },200); } 
+    closeMenu();
+  }
+  
+  document.getElementById('closeStudentModal')?.addEventListener('click',()=>document.getElementById('studentDetailModal').style.display='none');
+  window.onclick = function(e){ if(e.target.classList.contains('modal')) e.target.style.display='none'; }
+  
+  // SLIDE MENU NAVIGATION
+  document.getElementById('slideHome')?.addEventListener('click',()=>{ if(currentStudent) switchToPage(document.getElementById('studentPanel')); else if(isAdminMode) switchToPage(document.getElementById('adminPanel')); else switchToPage(document.getElementById('loginPage')); });
+  document.getElementById('slideAbout')?.addEventListener('click',()=>switchToPage(document.getElementById('aboutPage')));
+  document.getElementById('slideFaqRules')?.addEventListener('click',()=>switchToPage(document.getElementById('faqRulesPage')));
+  document.getElementById('slideAdmin')?.addEventListener('click',()=>{ const pwd=prompt('Password Admin:'); if(pwd==='POINT26'){ isAdminMode=true; switchToPage(document.getElementById('adminPanel')); document.getElementById('resetFabBtn').style.display='flex'; renderAdminDashboard(); } else if(pwd) alert('Salah!'); });
+  
+  document.getElementById('homeLogoBtn')?.addEventListener('click',()=>{ if(currentStudent) switchToPage(document.getElementById('studentPanel')); else if(isAdminMode) switchToPage(document.getElementById('adminPanel')); else switchToPage(document.getElementById('loginPage')); });
+  document.getElementById('backToHomeBtn')?.addEventListener('click',()=>{ if(currentStudent) switchToPage(document.getElementById('studentPanel')); else if(isAdminMode) switchToPage(document.getElementById('adminPanel')); else switchToPage(document.getElementById('loginPage')); });
+  document.getElementById('backToHomeFromFaqBtn')?.addEventListener('click',()=>{ if(currentStudent) switchToPage(document.getElementById('studentPanel')); else if(isAdminMode) switchToPage(document.getElementById('adminPanel')); else switchToPage(document.getElementById('loginPage')); });
+  
+  document.getElementById('studentLoginForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); const s=students.find(s=>s.code===document.getElementById('loginCode').value.trim() && s.password===document.getElementById('loginPassword').value.trim()); if(s){ currentStudent={id:s.id,code:s.code,name:s.name}; document.getElementById('studentInfo').innerHTML=`${s.name} (${s.code})`; switchToPage(document.getElementById('studentPanel')); showPage('overviewPage'); renderAllStudent(); } else alert('Kode atau password salah!'); });
+  document.getElementById('studentLogoutBtn')?.addEventListener('click',()=>{ currentStudent=null; switchToPage(document.getElementById('loginPage')); if(studentChart) studentChart.destroy(); studentChart=null; renderLeaderboard(); });
+  document.getElementById('logoutAdminBtn')?.addEventListener('click',()=>{ isAdminMode=false; switchToPage(document.getElementById('loginPage')); document.getElementById('resetFabBtn').style.display='none'; if(adminChart) adminChart.destroy(); adminChart=null; renderLeaderboard(); });
+  document.getElementById('resetFabBtn')?.addEventListener('click',()=>document.getElementById('resetModal').style.display='flex');
+  document.getElementById('modalCancelBtn')?.addEventListener('click',()=>document.getElementById('resetModal').style.display='none');
+  document.getElementById('modalConfirmBtn')?.addEventListener('click',async()=>{ document.getElementById('resetModal').style.display='none'; await resetAllData(); });
+  document.getElementById('exportPDFBtn')?.addEventListener('click',exportToPDF);
+  document.getElementById('gradeSelect')?.addEventListener('change',updateAutoPoints);
+  
+  document.getElementById('createStudentForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); const name=document.getElementById('newStudentName').value.trim(), code=document.getElementById('newStudentCode').value.trim(), pass=document.getElementById('newStudentPassword').value.trim(); if(!name||!code||!pass) alert('Isi semua!'); else if(students.some(s=>s.code===code)) alert('Kode sudah ada!'); else{ students.push({id:Date.now()+'-'+Math.random(), code, password:pass, name}); await saveToCloud(); document.getElementById('createResult').innerHTML=`✅ Akun ${name} (${code}) berhasil!`; document.getElementById('createStudentForm').reset(); if(isAdminMode) renderAdminDashboard(); renderLeaderboard(); setTimeout(()=>document.getElementById('createResult').innerHTML='',3000); } });
+  
+  document.getElementById('pointForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); if(!currentStudent) return; const code=document.getElementById('achievementCode').value, grade=document.getElementById('gradeSelect').value; if(!code||!achievementDB[code]) alert('Pilih kode prestasi!'); else{ const value=achievementDB[code].points[grade]; const file=document.getElementById('proofImage').files[0]; let img=''; if(file) img=await new Promise(r=>{ const fr=new FileReader(); fr.onload=()=>r(fr.result); fr.readAsDataURL(file); }); pointsData.push({ id:Date.now()+'-'+Math.random(), studentId:currentStudent.id, achievementCode:code, title:achievementDB[code].name, grade, value, imageBase64:img, status:'pending', createdAt:new Date().toISOString() }); await saveToCloud(); alert('✅ Poin dikirim!'); document.getElementById('pointForm').reset(); document.getElementById('selectedAchievementDisplay').value=''; document.getElementById('autoPoints').value=''; document.getElementById('previewImg').innerHTML=''; renderAllStudent(); } });
+  
+  document.getElementById('proofImage')?.addEventListener('change',function(){ if(this.files[0]){ const r=new FileReader(); r.onload=e=>document.getElementById('previewImg').innerHTML=`<img src="${e.target.result}" style="max-width:70px; border-radius:8px;">`; r.readAsDataURL(this.files[0]); } });
   document.getElementById('navOverview')?.addEventListener('click',()=>showPage('overviewPage'));
   document.getElementById('navUpload')?.addEventListener('click',()=>showPage('uploadPage'));
   document.getElementById('navAchievement')?.addEventListener('click',()=>showPage('achievementPage'));
   document.getElementById('navHistory')?.addEventListener('click',()=>showPage('historyPage'));
   document.getElementById('historyFilter')?.addEventListener('change',()=>renderAllStudent());
   document.getElementById('historySearch')?.addEventListener('input',()=>renderAllStudent());
-
-  // Menu & Fade Transitions
-  function switchToPage(pageToShow) {
-    const pages = ['loginPage', 'aboutPage', 'faqRulesPage', 'studentPanel', 'adminPanel'];
-    pages.forEach(page => {
-      const el = document.getElementById(page);
-      if(el && el !== pageToShow) {
-        el.style.opacity = '0';
-        setTimeout(() => el.classList.add('hidden-page'), 200);
-      }
-    });
-    if(pageToShow) {
-      setTimeout(() => {
-        pageToShow.classList.remove('hidden-page');
-        setTimeout(() => { pageToShow.style.opacity = '1'; }, 50);
-      }, 200);
-    }
-    closeMenu();
-  }
-
-  // Slide Nav Menu Items
-  document.getElementById('menuHome')?.addEventListener('click',()=>{
-    if(currentStudent) {
-      switchToPage(document.getElementById('studentPanel'));
-      showPage('overviewPage');
-    } else if(isAdminMode) {
-      switchToPage(document.getElementById('adminPanel'));
-    } else {
-      switchToPage(document.getElementById('loginPage'));
-    }
-  });
-  document.getElementById('homeLogoBtn')?.addEventListener('click',()=>{
-    if(currentStudent) {
-      switchToPage(document.getElementById('studentPanel'));
-      showPage('overviewPage');
-    } else if(isAdminMode) {
-      switchToPage(document.getElementById('adminPanel'));
-    } else {
-      switchToPage(document.getElementById('loginPage'));
-    }
-  });
-  document.getElementById('menuAboutSlide')?.addEventListener('click',()=>{
-    switchToPage(document.getElementById('aboutPage'));
-  });
-  document.getElementById('menuFaqRules')?.addEventListener('click',()=>{
-    switchToPage(document.getElementById('faqRulesPage'));
-  });
-  document.getElementById('menuAdminSlide')?.addEventListener('click',()=>{
-    const pwd = prompt('🔐 Password Admin:'); 
-    if(pwd === 'POINT26'){ 
-      isAdminMode = true; 
-      toggleAdminMenuItem();
-      switchToPage(document.getElementById('adminPanel'));
-      document.getElementById('resetFabBtn').style.display = 'flex'; 
-      renderAdminDashboard(); 
-    } else if(pwd) alert('Password salah!'); 
-  });
-  document.getElementById('backToHomeBtn')?.addEventListener('click',()=>{
-    if(currentStudent) {
-      switchToPage(document.getElementById('studentPanel'));
-      showPage('overviewPage');
-    } else if(isAdminMode) {
-      switchToPage(document.getElementById('adminPanel'));
-    } else {
-      switchToPage(document.getElementById('loginPage'));
-    }
-  });
-  document.getElementById('backToHomeFromFaqBtn')?.addEventListener('click',()=>{
-    if(currentStudent) {
-      switchToPage(document.getElementById('studentPanel'));
-      showPage('overviewPage');
-    } else if(isAdminMode) {
-      switchToPage(document.getElementById('adminPanel'));
-    } else {
-      switchToPage(document.getElementById('loginPage'));
-    }
-  });
-
-  document.getElementById('studentLoginForm')?.addEventListener('submit', async(e)=>{ 
-    e.preventDefault(); 
-    const code = document.getElementById('loginCode').value.trim(); 
-    const pass = document.getElementById('loginPassword').value.trim(); 
-    const student = students.find(s=>s.code===code && s.password===pass); 
-    if(student){ 
-      currentStudent = { id: student.id, code: student.code, name: student.name }; 
-      document.getElementById('studentInfo').innerHTML = `${student.name} (${student.code})`; 
-      switchToPage(document.getElementById('studentPanel'));
-      showPage('overviewPage'); 
-      renderAllStudent(); 
-    } else { alert('❌ Kode atau password salah!'); } 
-  });
-  
-  document.getElementById('studentLogoutBtn')?.addEventListener('click',()=>{ 
-    currentStudent = null; 
-    switchToPage(document.getElementById('loginPage'));
-    if(studentChart) { studentChart.destroy(); studentChart = null; }
-    renderLeaderboard();
-  });
-  
-  document.getElementById('logoutAdminBtn')?.addEventListener('click',()=>{ 
-    isAdminMode = false; 
-    toggleAdminMenuItem();
-    switchToPage(document.getElementById('loginPage'));
-    document.getElementById('resetFabBtn').style.display = 'none'; 
-    if(adminChart) { adminChart.destroy(); adminChart = null; }
-    renderLeaderboard();
-  });
-  
-  document.getElementById('resetFabBtn')?.addEventListener('click',()=>document.getElementById('resetModal').style.display='flex');
-  document.getElementById('modalCancelBtn')?.addEventListener('click',()=>document.getElementById('resetModal').style.display='none');
-  document.getElementById('modalConfirmBtn')?.addEventListener('click',async()=>{ document.getElementById('resetModal').style.display='none'; await resetAllData(); });
-  document.getElementById('exportPDFBtn')?.addEventListener('click',exportToPDF);
-  
-  document.getElementById('createStudentForm')?.addEventListener('submit', async(e)=>{ 
-    e.preventDefault(); 
-    const name = document.getElementById('newStudentName').value.trim(); 
-    const code = document.getElementById('newStudentCode').value.trim(); 
-    const pass = document.getElementById('newStudentPassword').value.trim(); 
-    if(!name||!code||!pass) alert('Isi semua field!'); 
-    else if(students.some(s=>s.code===code)) alert('Kode sudah ada!'); 
-    else{ 
-      students.push({ id: Date.now()+'-'+Math.random(), code, password: pass, name, createdAt: new Date().toISOString() }); 
-      await saveToCloud(); 
-      document.getElementById('createResult').innerHTML = `<span style="color:var(--success);">✅ Akun ${name} (${code}) berhasil dibuat!</span>`; 
-      document.getElementById('createStudentForm').reset(); 
-      if(isAdminMode) renderAdminDashboard(); 
-      renderLeaderboard();
-      setTimeout(()=>document.getElementById('createResult').innerHTML='',3000); 
-    } 
-  });
-  
-  document.getElementById('pointForm')?.addEventListener('submit', async(e)=>{ 
-    e.preventDefault(); 
-    if(!currentStudent) return; 
-    const code = document.getElementById('achievementCode').value; 
-    const grade = document.getElementById('gradeSelect').value; 
-    if(!code||!achievementDB[code]) alert('Pilih kode prestasi!'); 
-    else{ 
-      const value = achievementDB[code].points[grade]; 
-      const file = document.getElementById('proofImage').files[0]; 
-      let img = ''; 
-      if(file) img = await new Promise(r=>{ const fr=new FileReader(); fr.onload=()=>r(fr.result); fr.readAsDataURL(file); }); 
-      pointsData.push({ id: Date.now()+'-'+Math.random(), studentId: currentStudent.id, achievementCode: code, title: achievementDB[code].name, grade, value, imageBase64: img, status: 'pending', createdAt: new Date().toISOString() }); 
-      await saveToCloud(); 
-      alert('✅ Poin dikirim! Menunggu verifikasi admin.'); 
-      document.getElementById('pointForm').reset(); 
-      document.getElementById('previewImg').innerHTML = ''; 
-      document.getElementById('autoPoints').value = ''; 
-      document.getElementById('selectedAchievementDisplay').value = '';
-      document.getElementById('achievementCode').value = '';
-      renderAllStudent(); 
-      renderLeaderboard();
-    } 
-  });
-  
-  document.getElementById('proofImage')?.addEventListener('change',function(){ if(this.files[0]){ const reader=new FileReader(); reader.onload=e=>document.getElementById('previewImg').innerHTML=`<img src="${e.target.result}" style="max-width:70px; border-radius:8px;">`; reader.readAsDataURL(this.files[0]); } });
-  document.getElementById('gradeSelect')?.addEventListener('change',()=>{
-    const code = document.getElementById('achievementCode').value;
-    if(code && achievementDB[code]){
-      const grade = document.getElementById('gradeSelect').value;
-      document.getElementById('autoPoints').value = `${achievementDB[code].points[grade]} poin`;
-    }
-  });
   document.getElementById('themeToggle')?.addEventListener('click',()=>document.body.classList.toggle('dark'));
   
-  (async()=>{ 
-    await loadFromCloud(); 
-    renderLeaderboard();
-    toggleAdminMenuItem();
-    document.getElementById('loginPage').style.opacity = '1';
-    document.getElementById('aboutPage').classList.add('hidden-page');
-    document.getElementById('faqRulesPage').classList.add('hidden-page');
-    document.getElementById('studentPanel').classList.add('hidden-page'); 
-    document.getElementById('adminPanel').classList.add('hidden-page'); 
-    document.getElementById('resetFabBtn').style.display = 'none'; 
-  })();
+  (async()=>{ await loadFromCloud(); renderLeaderboard(); })();
 </script>
 </body>
 </html>
