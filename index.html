@@ -145,7 +145,6 @@
     .reset-fab { position: fixed; bottom: 30px; right: 30px; background: var(--danger); color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1000; border: none; }
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
     .modal-content { background: var(--bg-secondary); border-radius: 1.5rem; padding: 2rem; max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto; }
-    /* TABLE STYLE FOR ACHIEVEMENT MODAL */
     .achievement-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
     .achievement-table th, .achievement-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
     .achievement-table th { background: var(--border); font-weight: 600; position: sticky; top: 0; }
@@ -200,6 +199,42 @@
     .prestasi-table th { background: var(--border); font-weight: 600; }
     .detail-btn { background: var(--accent); color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; }
     .sync-indicator { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 1rem; background: var(--success); color: white; display: inline-block; margin-left: 0.5rem; }
+    
+    /* PASSWORD TOGGLE STYLES (FIXED POSITION) */
+    .password-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .password-wrapper input {
+      padding-right: 45px !important;
+      width: 100%;
+    }
+    .password-toggle {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+      padding: 0;
+      z-index: 10;
+    }
+    .password-toggle:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
     @media (max-width: 640px) { .navbar { padding: 0.8rem 1rem; } .student-nav { padding: 0.5rem 1rem; gap: 1rem; } .container { padding: 0 1rem; } .prestasi-table { font-size: 0.7rem; } }
   </style>
 </head>
@@ -248,7 +283,12 @@
         <h2>Login Siswa</h2>
         <form id="studentLoginForm">
           <input type="text" id="loginCode" placeholder="Kode Siswa" required style="margin-bottom: 1rem;">
-          <input type="password" id="loginPassword" placeholder="Password" required style="margin-bottom: 1.5rem;">
+          <div class="password-wrapper" style="margin-bottom: 1.5rem;">
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button type="button" class="password-toggle" id="toggleLoginPassword" title="Show/Hide Password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
           <button type="submit" style="width: 100%;"><i class="fas fa-sign-in-alt"></i> Masuk</button>
         </form>
         <p style="margin-top: 1rem; font-size: 0.8rem;">Hubungi OSIS untuk akun baru</p>
@@ -345,7 +385,7 @@
         <div class="flex-between" style="margin-top: 0.5rem; font-size: 0.8rem;"><span>📅 Total Poin</span><span id="nextLevelInfo">Butuh 50 poin lagi ke Level Perunggu</span></div>
       </div>
       <div class="card"><h3><i class="fas fa-chart-line"></i> Grafik Prestasi</h3><canvas id="studentChart"></canvas></div>
-      <div class="card"><h3><i class="fas fa-table-list"></i> 📋 Daftar Prestasi</h3><div style="overflow-x:auto;"><table class="prestasi-table" id="studentPrestasiTable"><thead><tr><th>Kode</th><th>Nama Prestasi</th><th>Tanggal</th><th>Status</th></tr></thead><tbody><tr><td colspan="4" style="text-align:center;">Belum ada数据</tbody></table></div></div>
+      <div class="card"><h3><i class="fas fa-table-list"></i> 📋 Daftar Prestasi</h3><div style="overflow-x:auto;"><table class="prestasi-table" id="studentPrestasiTable"><thead><tr><th>Kode</th><th>Nama Prestasi</th><th>Tanggal</th><th>Status</th></tr></thead><tbody><tr><td colspan="4" style="text-align:center;">Belum ada data</td></tr></tbody></table></div></div>
       <div class="card"><h3><i class="fas fa-medal"></i> 🏆 Lencana yang Didapat</h3><div id="badgesList" class="flex-between" style="gap: 0.5rem; flex-wrap: wrap;"></div></div>
     </div>
 
@@ -362,7 +402,29 @@
   <!-- ADMIN PANEL -->
   <div id="adminPanel" class="hidden-page fade-transition">
     <div class="flex-between"><h2>Admin POINT+</h2><button id="logoutAdminBtn" class="logout-btn">Keluar Admin</button></div>
-    <div class="dashboard-grid"><div class="card"><h3>Buat Akun Siswa</h3><form id="createStudentForm"><input type="text" id="newStudentName" placeholder="Nama" required><input type="text" id="newStudentCode" placeholder="Kode" required><input type="password" id="newStudentPassword" placeholder="Password" required><button type="submit" style="width:100%; margin-top:10px;">Buat Akun</button></form><div id="createResult"></div><button id="exportPDFBtn" class="btn-warning" style="width:100%; margin-top:10px;">Export PDF</button></div><div class="card"><h3>Overview Poin</h3><canvas id="adminChart"></canvas><div class="flex-between" style="margin-top:1rem;"><span>📅 Hari ini: <strong id="todayTotal">0</strong></span><span>📆 Bulan ini: <strong id="monthTotal">0</strong></span><span>🗓️ Tahun ini: <strong id="yearTotal">0</strong></span></div></div></div>
+    <div class="dashboard-grid">
+      <div class="card">
+        <h3>Buat Akun Siswa</h3>
+        <form id="createStudentForm">
+          <input type="text" id="newStudentName" placeholder="Nama" required>
+          <input type="text" id="newStudentCode" placeholder="Kode" required>
+          <div class="password-wrapper">
+            <input type="password" id="newStudentPassword" placeholder="Password" required>
+            <button type="button" class="password-toggle" id="toggleNewPassword" title="Show/Hide Password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <button type="submit" style="width:100%; margin-top:10px;">Buat Akun</button>
+        </form>
+        <div id="createResult"></div>
+        <button id="exportPDFBtn" class="btn-warning" style="width:100%; margin-top:10px;">Export PDF</button>
+      </div>
+      <div class="card">
+        <h3>Overview Poin</h3>
+        <canvas id="adminChart"></canvas>
+        <div class="flex-between" style="margin-top:1rem;"><span>📅 Hari ini: <strong id="todayTotal">0</strong></span><span>📆 Bulan ini: <strong id="monthTotal">0</strong></span><span>🗓️ Tahun ini: <strong id="yearTotal">0</strong></span></div>
+      </div>
+    </div>
     <div class="card"><h3>Verifikasi Poin (Klik gambar untuk zoom)</h3><div id="pendingList"></div></div>
     <div class="card"><h3><i class="fas fa-users"></i> Daftar Semua Siswa & Detail Prestasi</h3><div id="allStudentsList" style="overflow-x: auto;"></div></div>
   </div>
@@ -420,6 +482,29 @@
     document.getElementById('syncIndicator').style.background = 'var(--danger)';
     firestoreEnabled = false; 
   }
+
+  // ============ PASSWORD TOGGLE FUNCTION ============
+  function setupPasswordToggle(buttonId, inputId) {
+    const button = document.getElementById(buttonId);
+    const input = document.getElementById(inputId);
+    if (!button || !input) return;
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (input.type === 'password') {
+        input.type = 'text';
+        this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+        this.title = 'Hide Password';
+      } else {
+        input.type = 'password';
+        this.innerHTML = '<i class="fas fa-eye"></i>';
+        this.title = 'Show Password';
+      }
+    });
+  }
+  
+  // Setup password toggles
+  setupPasswordToggle('toggleLoginPassword', 'loginPassword');
+  setupPasswordToggle('toggleNewPassword', 'newStudentPassword');
 
   // SLIDE MENU FUNCTIONS
   function openMenu() { document.getElementById('slideMenu').classList.add('open'); document.getElementById('menuOverlay').classList.add('show'); }
