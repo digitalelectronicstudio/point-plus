@@ -194,9 +194,12 @@
     .filter-bar { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
     .delete-pending-btn { background: var(--danger); color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; cursor: pointer; }
     .delete-pending-btn:hover { background: #dc2626; }
+    
+    /* TABLE PRESTASI DI SISWA */
     .prestasi-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
     .prestasi-table th, .prestasi-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
     .prestasi-table th { background: var(--border); font-weight: 600; }
+    
     .detail-btn { background: var(--accent); color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; }
     .sync-indicator { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 1rem; background: var(--success); color: white; display: inline-block; margin-left: 0.5rem; }
     
@@ -215,6 +218,36 @@
     /* TOMBOL HAPUS SISWA */
     .delete-student-btn { background: var(--danger); color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; margin-left: 0.3rem; }
     .delete-student-btn:hover { background: #dc2626; }
+
+    /* STYLE TABEL SISWA ADMIN (FULL WIDTH & EXCEL-LIKE) */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+    }
+    .excel-table {
+      width: 100%;
+      border-collapse: collapse;
+      white-space: nowrap;
+    }
+    .excel-table th, .excel-table td {
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    .excel-table th {
+      background: var(--border);
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+    }
+    .excel-table tr:hover {
+      background: rgba(59, 130, 246, 0.05);
+    }
 
     @media (max-width: 640px) { .navbar { padding: 0.8rem 1rem; } .student-nav { padding: 0.5rem 1rem; gap: 1rem; } .container { padding: 0 1rem; } .prestasi-table { font-size: 0.7rem; } }
   </style>
@@ -384,9 +417,7 @@
   <div id="adminPanel" class="hidden-page fade-transition">
     <div class="flex-between"><h2>Admin POINT+</h2><button id="logoutAdminBtn" class="logout-btn">Keluar Admin</button></div>
     
-    <!-- ADMIN DASHBOARD GRID: KIRI BUAT AKUN, KANAN STATISTIK -->
     <div class="dashboard-grid">
-      <!-- Panel Buat Akun -->
       <div class="card">
         <h3>Buat Akun Siswa</h3>
         <form id="createStudentForm">
@@ -404,7 +435,6 @@
         <button id="exportPDFBtn" class="btn-warning" style="width:100%; margin-top:10px;">Export PDF</button>
       </div>
       
-      <!-- Panel Statistik (SEKARANG DI SEBELAH KANAN) -->
       <div class="card">
         <h3>Overview Poin</h3>
         <canvas id="adminChart"></canvas>
@@ -417,7 +447,14 @@
     </div>
 
     <div class="card"><h3>Verifikasi Poin (Klik gambar untuk zoom)</h3><div id="pendingList"></div></div>
-    <div class="card"><h3><i class="fas fa-users"></i> Daftar Semua Siswa & Detail Prestasi</h3><div id="allStudentsList" style="overflow-x: auto;"></div></div>
+    
+    <!-- TABEL SISWA FULL WIDTH EXCEL-LIKE -->
+    <div class="card">
+      <h3><i class="fas fa-users"></i> Daftar Semua Siswa & Detail Prestasi</h3>
+      <div class="table-wrapper">
+        <div id="allStudentsList"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -597,6 +634,7 @@
     if(top5.length===0) { container.innerHTML='<div style="text-align:center; padding:1rem;">✨ Belum ada siswa</div>'; return; }
     container.innerHTML = top5.map((s,i)=>{
       let rankClass='rank-normal', medal='';
+      // PERBAIKAN: Hanya menampilkan emoji di luar, tanpa emoji di dalam PP (diganti angka)
       if(i===0) { rankClass='rank-gold'; medal='🥇 '; }
       else if(i===1) { rankClass='rank-silver'; medal='🥈 '; }
       else if(i===2) { rankClass='rank-bronze'; medal='🥉 '; }
@@ -724,27 +762,28 @@
     const monthData = new Array(12).fill(0); approved.forEach(p=>{ const d=new Date(p.createdAt); if(d.getFullYear()===new Date().getFullYear()) monthData[d.getMonth()]+=p.value; });
     if(adminChart) adminChart.data.datasets[0].data=monthData, adminChart.update();
     else adminChart = new Chart(document.getElementById('adminChart'),{ type:'line', data:{ labels:['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'], datasets:[{ label:'Total Poin', data:monthData, borderColor:'#3b82f6' }] } });
+    
     const pending = pointsData.filter(p=>p.status==='pending');
     document.getElementById('pendingList').innerHTML = pending.length ? pending.map(p=>{ const s=students.find(s=>s.id===p.studentId); return `<div class="card" style="margin-bottom:1rem;"><div><strong>${s?.name}</strong> - ${p.achievementCode} (${p.title}) - ${p.value} poin</div>${p.imageBase64?`<a href="${p.imageBase64}" data-lightbox="admin"><img src="${p.imageBase64}" class="preview-img"></a>`:''}<div><button class="approve-btn" data-id="${p.id}" style="background:#10b981;">Setujui</button> <button class="reject-btn" data-id="${p.id}" style="background:#ef4444;">Tolak</button></div></div>`; }).join('') : '<div>✅ Semua terverifikasi</div>';
     document.querySelectorAll('.approve-btn').forEach(btn=>btn.addEventListener('click',async()=>{ let pt=pointsData.find(p=>p.id===btn.dataset.id); if(pt){pt.status='approved'; await saveToCloud(); renderAdminDashboard(); if(currentStudent) renderAllStudent(); renderLeaderboard();} }));
     document.querySelectorAll('.reject-btn').forEach(btn=>btn.addEventListener('click',async()=>{ let pt=pointsData.find(p=>p.id===btn.dataset.id); if(pt){pt.status='rejected'; await saveToCloud(); renderAdminDashboard(); if(currentStudent) renderAllStudent(); renderLeaderboard();} }));
     
-    // TAMBAHAN TOMBOL HAPUS SISWA DI TABEL
+    // TABEL ADMIN DENGAN BORDER SEPERTI EXCEL
     const studentsHtml = students.map(s=>{ 
       const total=pointsData.filter(p=>p.studentId===s.id && p.status==='approved' && !p.isBonus).reduce((a,b)=>a+b.value,0); 
       return `<tr>
-        <td>${s.name}</td>
+        <td style="font-weight:600; color:var(--accent);">${s.name}</td>
         <td><code>${s.code}</code></td>
         <td><code>${s.password}</code></td>
-        <td><strong>${total}</strong></td>
+        <td><strong>${total}</strong> poin</td>
         <td>
-          <button class="detail-btn" data-id="${s.id}" data-name="${s.name}">📋 Lihat Prestasi</button>
+          <button class="detail-btn" data-id="${s.id}" data-name="${s.name}"><i class="fas fa-eye"></i> Lihat Prestasi</button>
           <button class="delete-student-btn" data-id="${s.id}" data-name="${s.name}"><i class="fas fa-trash-alt"></i> Hapus</button>
         </td>
       </tr>`; 
     }).join('');
     
-    document.getElementById('allStudentsList').innerHTML = `<table style="width:100%"><thead><tr><th>Nama</th><th>Kode</th><th>Password</th><th>Total Poin</th><th>Aksi</th></tr></thead><tbody>${studentsHtml||'<tr><td colspan="5">Belum ada siswa</td></tr>'}</tbody></table>`;
+    document.getElementById('allStudentsList').innerHTML = `<table class="excel-table"><thead><tr><th>Nama Siswa</th><th>Kode Akun</th><th>Password</th><th>Total Poin</th><th>Aksi</th></tr></thead><tbody>${studentsHtml||'<tr><td colspan="5" style="text-align:center; padding:2rem;">Belum ada siswa terdaftar</td></tr>'}</tbody></table>`;
     
     document.querySelectorAll('.detail-btn').forEach(btn=>btn.addEventListener('click',()=>showStudentDetail(btn.dataset.id, btn.dataset.name)));
     
@@ -754,15 +793,11 @@
         const sid = btn.dataset.id;
         const sname = btn.dataset.name;
         if(confirm(`⚠️ Yakin ingin menghapus akun siswa "${sname}"? Semua data prestasi siswa ini akan ikut terhapus dan tidak bisa dikembalikan.`)) {
-          // Hapus siswa dari array students
           const studentIndex = students.findIndex(s => s.id === sid);
           if (studentIndex !== -1) {
             students.splice(studentIndex, 1);
-            // Hapus semua point milik siswa tersebut
             pointsData = pointsData.filter(p => p.studentId !== sid);
-            // Hapus data quest milik siswa tersebut
             if (studentQuests[sid]) delete studentQuests[sid];
-            
             await saveToCloud();
             renderAdminDashboard();
             renderLeaderboard();
