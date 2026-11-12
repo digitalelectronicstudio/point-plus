@@ -200,40 +200,21 @@
     .detail-btn { background: var(--accent); color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; }
     .sync-indicator { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 1rem; background: var(--success); color: white; display: inline-block; margin-left: 0.5rem; }
     
-    /* PASSWORD TOGGLE STYLES (FIXED POSITION) */
-    .password-wrapper {
-      position: relative;
-      width: 100%;
-    }
-    .password-wrapper input {
-      padding-right: 45px !important;
-      width: 100%;
-    }
+    /* PASSWORD TOGGLE STYLES */
+    .password-wrapper { position: relative; width: 100%; }
+    .password-wrapper input { padding-right: 45px !important; width: 100%; }
     .password-toggle {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      cursor: pointer;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.2s;
-      padding: 0;
-      z-index: 10;
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      background: var(--bg-secondary); border: 1px solid var(--border); cursor: pointer;
+      color: var(--text-secondary); font-size: 0.9rem; width: 32px; height: 32px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      transition: 0.2s; padding: 0; z-index: 10;
     }
-    .password-toggle:hover {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
+    .password-toggle:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* TOMBOL HAPUS SISWA */
+    .delete-student-btn { background: var(--danger); color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; margin-left: 0.3rem; }
+    .delete-student-btn:hover { background: #dc2626; }
 
     @media (max-width: 640px) { .navbar { padding: 0.8rem 1rem; } .student-nav { padding: 0.5rem 1rem; gap: 1rem; } .container { padding: 0 1rem; } .prestasi-table { font-size: 0.7rem; } }
   </style>
@@ -402,7 +383,10 @@
   <!-- ADMIN PANEL -->
   <div id="adminPanel" class="hidden-page fade-transition">
     <div class="flex-between"><h2>Admin POINT+</h2><button id="logoutAdminBtn" class="logout-btn">Keluar Admin</button></div>
+    
+    <!-- ADMIN DASHBOARD GRID: KIRI BUAT AKUN, KANAN STATISTIK -->
     <div class="dashboard-grid">
+      <!-- Panel Buat Akun -->
       <div class="card">
         <h3>Buat Akun Siswa</h3>
         <form id="createStudentForm">
@@ -419,12 +403,19 @@
         <div id="createResult"></div>
         <button id="exportPDFBtn" class="btn-warning" style="width:100%; margin-top:10px;">Export PDF</button>
       </div>
+      
+      <!-- Panel Statistik (SEKARANG DI SEBELAH KANAN) -->
       <div class="card">
         <h3>Overview Poin</h3>
         <canvas id="adminChart"></canvas>
-        <div class="flex-between" style="margin-top:1rem;"><span>📅 Hari ini: <strong id="todayTotal">0</strong></span><span>📆 Bulan ini: <strong id="monthTotal">0</strong></span><span>🗓️ Tahun ini: <strong id="yearTotal">0</strong></span></div>
+        <div class="flex-between" style="margin-top:1rem;">
+          <span>📅 Hari ini: <strong id="todayTotal">0</strong></span>
+          <span>📆 Bulan ini: <strong id="monthTotal">0</strong></span>
+          <span>🗓️ Tahun ini: <strong id="yearTotal">0</strong></span>
+        </div>
       </div>
     </div>
+
     <div class="card"><h3>Verifikasi Poin (Klik gambar untuk zoom)</h3><div id="pendingList"></div></div>
     <div class="card"><h3><i class="fas fa-users"></i> Daftar Semua Siswa & Detail Prestasi</h3><div id="allStudentsList" style="overflow-x: auto;"></div></div>
   </div>
@@ -502,7 +493,6 @@
     });
   }
   
-  // Setup password toggles
   setupPasswordToggle('toggleLoginPassword', 'loginPassword');
   setupPasswordToggle('toggleNewPassword', 'newStudentPassword');
 
@@ -738,9 +728,50 @@
     document.getElementById('pendingList').innerHTML = pending.length ? pending.map(p=>{ const s=students.find(s=>s.id===p.studentId); return `<div class="card" style="margin-bottom:1rem;"><div><strong>${s?.name}</strong> - ${p.achievementCode} (${p.title}) - ${p.value} poin</div>${p.imageBase64?`<a href="${p.imageBase64}" data-lightbox="admin"><img src="${p.imageBase64}" class="preview-img"></a>`:''}<div><button class="approve-btn" data-id="${p.id}" style="background:#10b981;">Setujui</button> <button class="reject-btn" data-id="${p.id}" style="background:#ef4444;">Tolak</button></div></div>`; }).join('') : '<div>✅ Semua terverifikasi</div>';
     document.querySelectorAll('.approve-btn').forEach(btn=>btn.addEventListener('click',async()=>{ let pt=pointsData.find(p=>p.id===btn.dataset.id); if(pt){pt.status='approved'; await saveToCloud(); renderAdminDashboard(); if(currentStudent) renderAllStudent(); renderLeaderboard();} }));
     document.querySelectorAll('.reject-btn').forEach(btn=>btn.addEventListener('click',async()=>{ let pt=pointsData.find(p=>p.id===btn.dataset.id); if(pt){pt.status='rejected'; await saveToCloud(); renderAdminDashboard(); if(currentStudent) renderAllStudent(); renderLeaderboard();} }));
-    const studentsHtml = students.map(s=>{ const total=pointsData.filter(p=>p.studentId===s.id && p.status==='approved' && !p.isBonus).reduce((a,b)=>a+b.value,0); return `<tr><td>${s.name}</td><td><code>${s.code}</code></td><td><code>${s.password}</code></td><td><strong>${total}</strong></td><td><button class="detail-btn" data-id="${s.id}" data-name="${s.name}">📋 Lihat Prestasi</button></td></tr>`; }).join('');
+    
+    // TAMBAHAN TOMBOL HAPUS SISWA DI TABEL
+    const studentsHtml = students.map(s=>{ 
+      const total=pointsData.filter(p=>p.studentId===s.id && p.status==='approved' && !p.isBonus).reduce((a,b)=>a+b.value,0); 
+      return `<tr>
+        <td>${s.name}</td>
+        <td><code>${s.code}</code></td>
+        <td><code>${s.password}</code></td>
+        <td><strong>${total}</strong></td>
+        <td>
+          <button class="detail-btn" data-id="${s.id}" data-name="${s.name}">📋 Lihat Prestasi</button>
+          <button class="delete-student-btn" data-id="${s.id}" data-name="${s.name}"><i class="fas fa-trash-alt"></i> Hapus</button>
+        </td>
+      </tr>`; 
+    }).join('');
+    
     document.getElementById('allStudentsList').innerHTML = `<table style="width:100%"><thead><tr><th>Nama</th><th>Kode</th><th>Password</th><th>Total Poin</th><th>Aksi</th></tr></thead><tbody>${studentsHtml||'<tr><td colspan="5">Belum ada siswa</td></tr>'}</tbody></table>`;
+    
     document.querySelectorAll('.detail-btn').forEach(btn=>btn.addEventListener('click',()=>showStudentDetail(btn.dataset.id, btn.dataset.name)));
+    
+    // EVENT LISTENER UNTUK TOMBOL HAPUS SISWA
+    document.querySelectorAll('.delete-student-btn').forEach(btn=>{
+      btn.addEventListener('click', async () => {
+        const sid = btn.dataset.id;
+        const sname = btn.dataset.name;
+        if(confirm(`⚠️ Yakin ingin menghapus akun siswa "${sname}"? Semua data prestasi siswa ini akan ikut terhapus dan tidak bisa dikembalikan.`)) {
+          // Hapus siswa dari array students
+          const studentIndex = students.findIndex(s => s.id === sid);
+          if (studentIndex !== -1) {
+            students.splice(studentIndex, 1);
+            // Hapus semua point milik siswa tersebut
+            pointsData = pointsData.filter(p => p.studentId !== sid);
+            // Hapus data quest milik siswa tersebut
+            if (studentQuests[sid]) delete studentQuests[sid];
+            
+            await saveToCloud();
+            renderAdminDashboard();
+            renderLeaderboard();
+            alert(`✅ Akun ${sname} dan semua datanya berhasil dihapus!`);
+          }
+        }
+      });
+    });
+    
     if(typeof lightbox!=='undefined') lightbox.option({resizeDuration:200});
   }
   
