@@ -932,7 +932,29 @@
   document.getElementById('exportPDFBtn')?.addEventListener('click',exportToPDF);
   document.getElementById('gradeSelect')?.addEventListener('change',updateAutoPoints);
   
-  document.getElementById('createStudentForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); const name=document.getElementById('newStudentName').value.trim(), code=document.getElementById('newStudentCode').value.trim(), pass=document.getElementById('newStudentPassword').value.trim(); if(!name||!code||!pass) alert('Isi semua!'); else if(students.some(s=>s.code===code)) alert('Kode sudah ada!'); else{ students.push({id:Date.now()+'-'+Math.random(), code, password:pass, name}); await saveToCloud(); document.getElementById('createResult').innerHTML=`✅ Akun ${name} (${code}) berhasil!`; document.getElementById('createStudentForm').reset(); if(isAdminMode) renderAdminDashboard(); renderLeaderboard(); setTimeout(()=>document.getElementById('createResult').innerHTML='',3000); } });
+  // FORM BUAT AKUN SISWA (DENGAN VALIDASI PASSWORD UNIK)
+  document.getElementById('createStudentForm')?.addEventListener('submit', async(e)=>{ 
+    e.preventDefault(); 
+    const name=document.getElementById('newStudentName').value.trim(), 
+          code=document.getElementById('newStudentCode').value.trim(), 
+          pass=document.getElementById('newStudentPassword').value.trim(); 
+          
+    if(!name||!code||!pass) {
+      alert('Isi semua field!'); 
+    } else if(students.some(s=>s.code===code)) {
+      alert('Kode siswa sudah ada, gunakan kode lain!'); 
+    } else if(students.some(s=>s.password===pass)) {
+      alert('Password sudah digunakan oleh siswa lain, gunakan password berbeda!');
+    } else { 
+      students.push({id:Date.now()+'-'+Math.random(), code, password:pass, name}); 
+      await saveToCloud(); 
+      document.getElementById('createResult').innerHTML=`✅ Akun ${name} (${code}) berhasil!`; 
+      document.getElementById('createStudentForm').reset(); 
+      if(isAdminMode) renderAdminDashboard(); 
+      renderLeaderboard(); 
+      setTimeout(()=>document.getElementById('createResult').innerHTML='',3000); 
+    } 
+  });
   
   document.getElementById('pointForm')?.addEventListener('submit', async(e)=>{ e.preventDefault(); if(!currentStudent) return; const code=document.getElementById('achievementCode').value, grade=document.getElementById('gradeSelect').value; if(!code||!achievementDB[code]) alert('Pilih kode prestasi!'); else{ const value=achievementDB[code].points[grade]; const file=document.getElementById('proofImage').files[0]; let img=''; if(file) img=await new Promise(r=>{ const fr=new FileReader(); fr.onload=()=>r(fr.result); fr.readAsDataURL(file); }); pointsData.push({ id:Date.now()+'-'+Math.random(), studentId:currentStudent.id, achievementCode:code, title:achievementDB[code].name, grade, value, imageBase64:img, status:'pending', createdAt:new Date().toISOString() }); await saveToCloud(); alert('✅ Poin dikirim!'); document.getElementById('pointForm').reset(); document.getElementById('selectedAchievementDisplay').value=''; document.getElementById('autoPoints').value=''; document.getElementById('previewImg').innerHTML=''; renderAllStudent(); } });
   
