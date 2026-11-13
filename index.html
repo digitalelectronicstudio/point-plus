@@ -33,87 +33,29 @@
 
     /* STARTUP ANIMATION */
     .startup-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--accent);
-      z-index: 10000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 1s ease;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--accent); z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity 1s ease;
     }
-    .startup-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 3rem;
-      font-weight: 800;
-      color: white;
-      animation: fadeInUp 0.8s ease;
-    }
-    .startup-logo .plus {
-      font-size: 3.5rem;
-      animation: plusMove 0.6s ease infinite alternate;
-    }
-    @keyframes plusMove {
-      0% { transform: translateX(0); opacity: 0.7; }
-      100% { transform: translateX(8px); opacity: 1; }
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .startup-logo { display: flex; align-items: center; gap: 0.5rem; font-size: 3rem; font-weight: 800; color: white; animation: fadeInUp 0.8s ease; }
+    .startup-logo .plus { font-size: 3.5rem; animation: plusMove 0.6s ease infinite alternate; }
+    @keyframes plusMove { 0% { transform: translateX(0); opacity: 0.7; } 100% { transform: translateX(8px); opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .fade-transition { transition: opacity 0.5s ease; }
     
     /* SLIDE MENU BAR */
     .slide-menu {
-      position: fixed;
-      top: 0;
-      left: -280px;
-      width: 280px;
-      height: 100%;
-      background: var(--bg-secondary);
-      box-shadow: 2px 0 20px rgba(0,0,0,0.1);
-      z-index: 1000;
-      transition: left 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid var(--border);
+      position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
+      background: var(--bg-secondary); box-shadow: 2px 0 20px rgba(0,0,0,0.1); z-index: 1000;
+      transition: left 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); display: flex; flex-direction: column; border-right: 1px solid var(--border);
     }
     .slide-menu.open { left: 0; }
-    .slide-header {
-      padding: 1.5rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .slide-header { padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
     .slide-header h3 { background: linear-gradient(135deg, var(--accent), #8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .close-menu { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary); }
     .slide-items { flex: 1; padding: 1rem 0; }
-    .slide-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.8rem 1.5rem;
-      cursor: pointer;
-      transition: 0.2s;
-      color: var(--text-primary);
-    }
+    .slide-item { display: flex; align-items: center; gap: 1rem; padding: 0.8rem 1.5rem; cursor: pointer; transition: 0.2s; color: var(--text-primary); }
     .slide-item:hover { background: var(--border); }
-    .menu-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 999;
-      display: none;
-    }
+    .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: none; }
     .menu-overlay.show { display: block; }
     
     .navbar { backdrop-filter: blur(12px); background: var(--navbar-blur); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
@@ -156,6 +98,7 @@
     .faq-rules-text { line-height: 1.8; text-align: left; }
     .faq-rules-text h3 { margin-top: 1rem; margin-bottom: 0.5rem; color: var(--accent); }
     .faq-rules-text h4 { margin-top: 0.5rem; margin-bottom: 0.2rem; color: var(--text-primary); }
+    
     .leaderboard-item-new { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--border); transition: 0.2s; }
     .leaderboard-item-new:hover { background: var(--border); border-radius: 1rem; }
     .rank-medal { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; font-size: 1.4rem; }
@@ -168,23 +111,36 @@
     .leaderboard-points-new { font-size: 0.8rem; color: var(--gold); font-weight: 600; }
     .leaderboard-progress { width: 100px; height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 6px; }
     .leaderboard-progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold), #f59e0b); }
+    
+    /* ACHIEVEMENT UPGRADE */
+    .quest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
     .quest-card-improved {
       background: var(--bg-secondary);
       border-radius: 1rem;
-      padding: 1.2rem;
-      margin-bottom: 1rem;
+      padding: 1.5rem;
       border: 1px solid var(--border);
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
-    .quest-card-improved:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-    .quest-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; }
-    .quest-title { font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-    .quest-badge-earned { background: linear-gradient(135deg, var(--gold), #f59e0b); color: white; padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; }
-    .quest-badge-pending { background: var(--border); color: var(--text-secondary); padding: 0.2rem 0.6rem; border-radius: 2rem; font-size: 0.7rem; }
-    .quest-progress-improved { background: var(--border); border-radius: 1rem; height: 10px; overflow: hidden; margin: 0.5rem 0; }
+    .quest-card-improved:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--accent); }
+    .quest-card-improved.completed { border-color: var(--success); background: rgba(16, 185, 129, 0.05); }
+    .quest-bg-icon {
+      position: absolute; top: -10px; right: -10px; font-size: 5rem; opacity: 0.05; color: var(--text-primary); z-index: 0; transform: rotate(15deg);
+    }
+    .quest-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem; position: relative; z-index: 1; }
+    .quest-title { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); }
+    .quest-desc { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.2rem; position: relative; z-index: 1; min-height: 40px; }
+    .quest-progress-improved { background: var(--border); border-radius: 1rem; height: 8px; overflow: hidden; margin-bottom: 0.5rem; position: relative; z-index: 1; }
     .quest-progress-fill { background: linear-gradient(90deg, var(--accent), #8b5cf6); height: 100%; border-radius: 1rem; transition: width 0.5s ease; }
-    .quest-footer { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.75rem; }
-    .quest-reward { color: var(--gold); font-weight: 600; }
+    .quest-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; position: relative; z-index: 1; }
+    .quest-reward { color: var(--gold); font-weight: 700; background: rgba(251, 191, 36, 0.1); padding: 0.2rem 0.6rem; border-radius: 1rem; }
+    
     .history-item { background: var(--bg-secondary); border-radius: 1rem; padding: 1rem; margin-bottom: 0.8rem; border: 1px solid var(--border); }
     .history-item:hover { transform: translateX(4px); border-left-color: var(--accent); border-left-width: 3px; }
     .history-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 0.5rem; }
@@ -195,12 +151,9 @@
     .delete-pending-btn { background: var(--danger); color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; cursor: pointer; }
     .delete-pending-btn:hover { background: #dc2626; }
     
-    /* TABLE PRESTASI DI SISWA */
     .prestasi-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
     .prestasi-table th, .prestasi-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
     .prestasi-table th { background: var(--border); font-weight: 600; }
-    
-    .detail-btn { background: var(--accent); color: white; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; }
     .sync-indicator { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 1rem; background: var(--success); color: white; display: inline-block; margin-left: 0.5rem; }
     
     /* PASSWORD TOGGLE STYLES */
@@ -214,10 +167,6 @@
       transition: 0.2s; padding: 0; z-index: 10;
     }
     .password-toggle:hover { background: var(--accent); color: white; border-color: var(--accent); }
-
-    /* TOMBOL HAPUS SISWA */
-    .delete-student-btn { background: var(--danger); color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; margin-left: 0.3rem; }
-    .delete-student-btn:hover { background: #dc2626; }
 
     /* STYLE TABEL SISWA ADMIN (FULL WIDTH & EXCEL-LIKE) */
     .table-wrapper {
@@ -236,6 +185,7 @@
       padding: 1rem 1.25rem;
       border: 1px solid var(--border);
       text-align: left;
+      vertical-align: middle;
     }
     .excel-table th {
       background: var(--border);
@@ -245,11 +195,38 @@
       font-size: 0.8rem;
       letter-spacing: 0.5px;
     }
-    .excel-table tr:hover {
-      background: rgba(59, 130, 246, 0.05);
-    }
+    .excel-table tr:hover { background: rgba(59, 130, 246, 0.05); }
 
-    @media (max-width: 640px) { .navbar { padding: 0.8rem 1rem; } .student-nav { padding: 0.5rem 1rem; gap: 1rem; } .container { padding: 0 1rem; } .prestasi-table { font-size: 0.7rem; } }
+    /* ACTION DROPDOWN MENU (TITIK TIGA) */
+    .action-dropdown { position: relative; display: inline-block; }
+    .action-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
+      width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: 0.2s; font-size: 1rem;
+    }
+    .action-btn:hover { background: var(--border); color: var(--text-primary); transform: none; }
+    .action-menu {
+      display: none; position: absolute; right: 0; top: 100%; margin-top: 0.5rem;
+      background: var(--bg-secondary); min-width: 180px; border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2); border: 1px solid var(--border);
+      z-index: 100; overflow: hidden; flex-direction: column;
+    }
+    .action-menu.show { display: flex; }
+    .action-item {
+      padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.75rem;
+      cursor: pointer; font-size: 0.85rem; font-weight: 500; color: var(--text-primary);
+      transition: 0.2s; border: none; background: transparent; text-align: left; width: 100%;
+    }
+    .action-item:hover { background: var(--border); transform: none; }
+    .action-item.danger { color: var(--danger); border-top: 1px solid var(--border); }
+    .action-item.danger:hover { background: rgba(239, 68, 68, 0.1); }
+
+    @media (max-width: 640px) { 
+      .navbar { padding: 0.8rem 1rem; } 
+      .student-nav { padding: 0.5rem 1rem; gap: 1rem; } 
+      .container { padding: 0 1rem; } 
+      .prestasi-table { font-size: 0.7rem; } 
+    }
   </style>
 </head>
 <body>
@@ -284,7 +261,7 @@
   <div class="logo" id="homeLogoBtn">POINT+</div>
   <div class="nav-actions">
     <div class="menu-icon" id="menuIcon"><i class="fas fa-bars"></i></div>
-    <div class="menu-item" id="themeToggle"><i class="fas fa-moon"></i></div>
+    <div class="menu-item" id="themeToggle" style="cursor:pointer; padding: 0.5rem; color: var(--text-primary);"><i class="fas fa-moon"></i></div>
   </div>
 </nav>
 
@@ -404,11 +381,25 @@
     </div>
 
     <div id="uploadPage" class="hidden-page">
-      <div class="card"><h3><i class="fas fa-plus-circle"></i> Ajukan Prestasi Baru</h3><form id="pointForm"><label>📌 Pilih Kode Prestasi (60+ Jenis)</label><input type="text" id="selectedAchievementDisplay" placeholder="Klik untuk memilih prestasi" readonly style="cursor: pointer;" onclick="openAchievementModal()"><input type="hidden" id="achievementCode"><div id="achievementDesc" style="font-size:0.75rem; margin:5px 0;"></div><label>🏷️ Grade Penyelenggara</label><select id="gradeSelect"><option value="A">A - Dinas Pemerintah</option><option value="B">B - Non Pemerintah</option></select><label>⭐ Poin Otomatis</label><input type="text" id="autoPoints" readonly style="background:var(--border);"><label>📸 Foto Bukti</label><input type="file" id="proofImage" accept="image/*"><div id="previewImg"></div><button type="submit"><i class="fas fa-paper-plane"></i> Kirim ke Verifikasi</button></form></div>
+      <div class="card"><h3><i class="fas fa-plus-circle"></i> Ajukan Prestasi Baru</h3><form id="pointForm"><label>📌 Pilih Kode Prestasi (60+ Jenis)</label><input type="text" id="selectedAchievementDisplay" placeholder="Klik untuk memilih prestasi" readonly style="cursor: pointer;" onclick="openAchievementModal()"><input type="hidden" id="achievementCode"><div id="achievementDesc" style="font-size:0.75rem; margin:5px 0;"></div><label>🏷️ Grade Penyelenggara</label><select id="gradeSelect"><option value="A">A - Dinas Pemerintah</option><option value="B">B - Non Pemerintah</option></select><label>⭐ Poin Otomatis</label><input type="text" id="autoPoints" readonly style="background:var(--border);"><label>📸 Foto Bukti</label><input type="file" id="proofImage" accept="image/*"><div id="previewImg"></div><button type="submit" style="margin-top:1rem;"><i class="fas fa-paper-plane"></i> Kirim ke Verifikasi</button></form></div>
       <div class="card"><h3><i class="fas fa-clock"></i> ⏳ Pengajuan Menunggu Verifikasi</h3><div id="pendingStatusList"></div></div>
     </div>
 
-    <div id="achievementPage" class="hidden-page"><div class="card"><h3><i class="fas fa-flag-checkered"></i> 🎯 Misi & Quest</h3><div id="questList"></div></div><div class="card"><h3><i class="fas fa-chart-simple"></i> Statistik Achievement</h3><div class="flex-between"><div>🏆 Quest Selesai: <strong id="completedQuests">0</strong>/5</div><div>🎁 Bonus Poin: <strong id="totalBonusPoints2">0</strong></div></div></div></div>
+    <div id="achievementPage" class="hidden-page">
+      <div class="card">
+        <div class="flex-between" style="margin-bottom: 1rem;">
+          <h3><i class="fas fa-flag-checkered"></i> 🎯 Misi & Quest</h3>
+          <div class="badge" style="background: var(--gold); color: black;">🏆 Selesai: <strong id="completedQuests">0</strong>/5</div>
+        </div>
+        <div id="questList" class="quest-grid"></div>
+      </div>
+      <div class="card">
+        <h3><i class="fas fa-chart-simple"></i> Statistik Achievement</h3>
+        <div class="flex-between" style="margin-top:1rem;">
+          <div style="font-size: 1.1rem;">Total Bonus Poin Didapat: <strong id="totalBonusPoints2" style="color: var(--gold);">0</strong></div>
+        </div>
+      </div>
+    </div>
 
     <div id="historyPage" class="hidden-page"><div class="card"><h3><i class="fas fa-filter"></i> Filter Riwayat</h3><div class="filter-bar"><select id="historyFilter"><option value="all">📋 Semua</option><option value="approved">✅ Disetujui</option><option value="quest">🎯 Bonus Quest</option></select><input type="text" id="historySearch" placeholder="🔍 Cari prestasi..."></div></div><div class="card"><h3><i class="fas fa-history"></i> Riwayat Prestasi Disetujui</h3><div id="historyList"></div></div></div>
   </div>
@@ -480,6 +471,25 @@
 </div>
 
 <div id="studentDetailModal" class="modal"><div class="modal-content"><h3 id="modalStudentName">Detail Prestasi Siswa</h3><div id="modalStudentPrestasiList" style="max-height:60vh; overflow-y:auto;"></div><button id="closeStudentModal" class="btn" style="margin-top:1rem;">Tutup</button></div></div>
+
+<!-- MODAL GANTI PASSWORD SISWA -->
+<div id="changePasswordModal" class="modal">
+  <div class="modal-content" style="max-width: 400px; text-align: left;">
+    <h3 style="text-align: center; margin-bottom: 1rem;"><i class="fas fa-key"></i> Ganti Password Siswa</h3>
+    <p style="text-align: center; margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-secondary);">Siswa: <strong id="changePwdStudentName" style="color: var(--accent);"></strong></p>
+    <div class="password-wrapper">
+      <input type="password" id="newPasswordInput" placeholder="Password Baru" required>
+      <button type="button" class="password-toggle" id="toggleNewPwdModal" title="Show/Hide Password">
+        <i class="fas fa-eye"></i>
+      </button>
+    </div>
+    <div class="flex-between" style="margin-top: 1.5rem; justify-content: center; gap: 1rem;">
+      <button id="cancelChangePwdBtn" class="btn" style="background: #64748b;">Batal</button>
+      <button id="saveChangePwdBtn" class="btn" style="background: var(--success);">Simpan</button>
+    </div>
+  </div>
+</div>
+
 <button id="resetFabBtn" class="reset-fab" style="display: none;"><i class="fas fa-trash-alt"></i></button>
 <div id="resetModal" class="modal"><div class="modal-content"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--warning);"></i><h3>⚠️ Hapus Semua Data?</h3><p>Tindakan tidak dapat dibatalkan!</p><div class="flex-between" style="justify-content: center; gap: 1rem;"><button id="modalCancelBtn" class="btn">Batal</button><button id="modalConfirmBtn" class="btn-danger">Hapus</button></div></div></div>
 
@@ -532,6 +542,7 @@
   
   setupPasswordToggle('toggleLoginPassword', 'loginPassword');
   setupPasswordToggle('toggleNewPassword', 'newStudentPassword');
+  setupPasswordToggle('toggleNewPwdModal', 'newPasswordInput');
 
   // SLIDE MENU FUNCTIONS
   function openMenu() { document.getElementById('slideMenu').classList.add('open'); document.getElementById('menuOverlay').classList.add('show'); }
@@ -612,6 +623,7 @@
   let students = [], pointsData = [], studentQuests = {};
   let currentStudent = null, isAdminMode = false;
   let studentChart = null, adminChart = null;
+  let currentChangePwdStudentId = null;
 
   async function saveToCloud() { 
     const data = { students, points: pointsData, quests: studentQuests }; 
@@ -634,7 +646,6 @@
     if(top5.length===0) { container.innerHTML='<div style="text-align:center; padding:1rem;">✨ Belum ada siswa</div>'; return; }
     container.innerHTML = top5.map((s,i)=>{
       let rankClass='rank-normal', medal='';
-      // PERBAIKAN: Hanya menampilkan emoji di luar, tanpa emoji di dalam PP (diganti angka)
       if(i===0) { rankClass='rank-gold'; medal='🥇 '; }
       else if(i===1) { rankClass='rank-silver'; medal='🥈 '; }
       else if(i===2) { rankClass='rank-bronze'; medal='🥉 '; }
@@ -732,10 +743,29 @@
     if(recentPoints.length) tableBody.innerHTML = recentPoints.map(p=>`<tr><td>${p.achievementCode}</td><td>${p.title}</td><td>${new Date(p.createdAt).toLocaleDateString()}</td><td><span class="status-approved">✅ Disetujui</span></td></tr>`).join('');
     else tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Belum ada prestasi</td></tr>';
     
+    // UPGRADED ACHIEVEMENT UI
     const sq = studentQuests[currentStudent.id]||{};
     document.getElementById('badgesList').innerHTML = quests.filter(q=>sq[q.id]?.completed).map(q=>`<span class="badge">${q.badge}</span>`).join('') || '<span>✨ Belum ada lencana</span>';
-    document.getElementById('questList').innerHTML = quests.map(q=>{ const data=sq[q.id]||{progress:0,completed:false}; const percent=Math.min(100,(data.progress/q.target)*100); return `<div class="quest-card-improved"><div class="quest-header"><div class="quest-title"><i class="fas ${q.icon}"></i> ${q.name}</div>${data.completed?'<span class="quest-badge-earned">✅ Selesai +'+q.reward+' poin</span>':'<span class="quest-badge-pending">🎯 Target: '+q.target+'</span>'}</div><div class="quest-desc">${q.desc}</div><div class="quest-progress-improved"><div class="quest-progress-fill" style="width:${percent}%"></div></div><div class="quest-footer"><span>📊 Progress: ${data.progress}/${q.target}</span><span class="quest-reward"><i class="fas fa-gift"></i> +${q.reward} poin</span></div></div>`; }).join('');
-    document.getElementById('completedQuests').innerHTML = `${quests.filter(q=>sq[q.id]?.completed).length}/5`;
+    
+    document.getElementById('questList').innerHTML = quests.map(q=>{ 
+      const data=sq[q.id]||{progress:0,completed:false}; 
+      const percent=Math.min(100,(data.progress/q.target)*100); 
+      return `<div class="quest-card-improved ${data.completed ? 'completed' : ''}">
+        <i class="fas ${q.icon} quest-bg-icon"></i>
+        <div class="quest-header">
+          <div class="quest-title"><i class="fas ${q.icon}"></i> ${q.name}</div>
+          ${data.completed ? '<span class="quest-badge-earned">✅ Selesai</span>' : '<span class="quest-badge-pending">🎯 Target: '+q.target+'</span>'}
+        </div>
+        <div class="quest-desc">${q.desc}</div>
+        <div class="quest-progress-improved"><div class="quest-progress-fill" style="width:${percent}%"></div></div>
+        <div class="quest-footer">
+          <span style="color:var(--text-secondary);">📊 Progress: ${data.progress}/${q.target}</span>
+          <span class="quest-reward"><i class="fas fa-gift"></i> +${q.reward} poin</span>
+        </div>
+      </div>`; 
+    }).join('');
+    
+    document.getElementById('completedQuests').innerHTML = `${quests.filter(q=>sq[q.id]?.completed).length}`;
     document.getElementById('totalBonusPoints2').innerHTML = getBonusPoints(currentStudent.id);
     
     const pending = pointsData.filter(p=>p.studentId===currentStudent.id && p.status==='pending');
@@ -768,7 +798,7 @@
     document.querySelectorAll('.approve-btn').forEach(btn=>btn.addEventListener('click',async()=>{ let pt=pointsData.find(p=>p.id===btn.dataset.id); if(pt){pt.status='approved'; await saveToCloud(); renderAdminDashboard(); if(currentStudent) renderAllStudent(); renderLeaderboard();} }));
     document.querySelectorAll('.reject-btn').forEach(btn=>btn.addEventListener('click',async()=>{ let pt=pointsData.find(p=>p.id===btn.dataset.id); if(pt){pt.status='rejected'; await saveToCloud(); renderAdminDashboard(); if(currentStudent) renderAllStudent(); renderLeaderboard();} }));
     
-    // TABEL ADMIN DENGAN BORDER SEPERTI EXCEL
+    // TABEL ADMIN DENGAN MENU AKSI (TITIK TIGA)
     const studentsHtml = students.map(s=>{ 
       const total=pointsData.filter(p=>p.studentId===s.id && p.status==='approved' && !p.isBonus).reduce((a,b)=>a+b.value,0); 
       return `<tr>
@@ -777,17 +807,32 @@
         <td><code>${s.password}</code></td>
         <td><strong>${total}</strong> poin</td>
         <td>
-          <button class="detail-btn" data-id="${s.id}" data-name="${s.name}"><i class="fas fa-eye"></i> Lihat Prestasi</button>
-          <button class="delete-student-btn" data-id="${s.id}" data-name="${s.name}"><i class="fas fa-trash-alt"></i> Hapus</button>
+          <div class="action-dropdown">
+            <button class="action-btn" onclick="toggleActionMenu(this)"><i class="fas fa-ellipsis-v"></i></button>
+            <div class="action-menu">
+              <button class="action-item detail-btn" data-id="${s.id}" data-name="${s.name}"><i class="fas fa-eye" style="color:var(--accent);"></i> Lihat Prestasi</button>
+              <button class="action-item change-pwd-btn" data-id="${s.id}" data-name="${s.name}"><i class="fas fa-key" style="color:var(--warning);"></i> Ganti Password</button>
+              <button class="action-item danger delete-student-btn" data-id="${s.id}" data-name="${s.name}"><i class="fas fa-trash-alt"></i> Hapus Akun</button>
+            </div>
+          </div>
         </td>
       </tr>`; 
     }).join('');
     
-    document.getElementById('allStudentsList').innerHTML = `<table class="excel-table"><thead><tr><th>Nama Siswa</th><th>Kode Akun</th><th>Password</th><th>Total Poin</th><th>Aksi</th></tr></thead><tbody>${studentsHtml||'<tr><td colspan="5" style="text-align:center; padding:2rem;">Belum ada siswa terdaftar</td></tr>'}</tbody></table>`;
+    document.getElementById('allStudentsList').innerHTML = `<table class="excel-table"><thead><tr><th>Nama Siswa</th><th>Kode Akun</th><th>Password</th><th>Total Poin</th><th style="text-align:center;">Aksi</th></tr></thead><tbody>${studentsHtml||'<tr><td colspan="5" style="text-align:center; padding:2rem;">Belum ada siswa terdaftar</td></tr>'}</tbody></table>`;
     
-    document.querySelectorAll('.detail-btn').forEach(btn=>btn.addEventListener('click',()=>showStudentDetail(btn.dataset.id, btn.dataset.name)));
+    // RE-BIND EVENT LISTENERS UNTUK MENU AKSI
+    document.querySelectorAll('.detail-btn').forEach(btn=>btn.addEventListener('click',()=>{
+      showStudentDetail(btn.dataset.id, btn.dataset.name);
+    }));
     
-    // EVENT LISTENER UNTUK TOMBOL HAPUS SISWA
+    document.querySelectorAll('.change-pwd-btn').forEach(btn=>btn.addEventListener('click',()=>{
+      currentChangePwdStudentId = btn.dataset.id;
+      document.getElementById('changePwdStudentName').innerText = btn.dataset.name;
+      document.getElementById('newPasswordInput').value = '';
+      document.getElementById('changePasswordModal').style.display = 'flex';
+    }));
+    
     document.querySelectorAll('.delete-student-btn').forEach(btn=>{
       btn.addEventListener('click', async () => {
         const sid = btn.dataset.id;
@@ -810,6 +855,24 @@
     if(typeof lightbox!=='undefined') lightbox.option({resizeDuration:200});
   }
   
+  // FUNGSI TOGGLE DROPDOWN MENU
+  window.toggleActionMenu = function(btn) {
+    // Tutup semua menu lain yang terbuka
+    const allMenus = document.querySelectorAll('.action-menu');
+    allMenus.forEach(menu => {
+      if (menu !== btn.nextElementSibling) menu.classList.remove('show');
+    });
+    // Toggle menu yang diklik
+    btn.nextElementSibling.classList.toggle('show');
+  }
+  
+  // Tutup menu dropdown jika klik di luar
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.action-dropdown')) {
+      document.querySelectorAll('.action-menu').forEach(menu => menu.classList.remove('show'));
+    }
+  });
+  
   function showStudentDetail(sid, sname){
     const prestasi = pointsData.filter(p=>p.studentId===sid && p.status==='approved').sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
     document.getElementById('modalStudentName').innerHTML = `📋 Detail Prestasi: ${sname}`;
@@ -830,6 +893,24 @@
   }
   
   document.getElementById('closeStudentModal')?.addEventListener('click',()=>document.getElementById('studentDetailModal').style.display='none');
+  document.getElementById('cancelChangePwdBtn')?.addEventListener('click',()=>document.getElementById('changePasswordModal').style.display='none');
+  
+  document.getElementById('saveChangePwdBtn')?.addEventListener('click', async () => {
+    const newPwd = document.getElementById('newPasswordInput').value.trim();
+    if (!newPwd || newPwd.length < 3) {
+      alert('Password minimal 3 karakter!');
+      return;
+    }
+    const studentIndex = students.findIndex(s => s.id === currentChangePwdStudentId);
+    if (studentIndex !== -1) {
+      students[studentIndex].password = newPwd;
+      await saveToCloud();
+      document.getElementById('changePasswordModal').style.display = 'none';
+      renderAdminDashboard();
+      alert('✅ Password siswa berhasil diubah!');
+    }
+  });
+  
   window.onclick = function(e){ if(e.target.classList.contains('modal')) e.target.style.display='none'; }
   
   // SLIDE MENU NAVIGATION
