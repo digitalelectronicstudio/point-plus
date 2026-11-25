@@ -635,13 +635,74 @@ canvas { max-height: 260px; width: 100%; }
 }
 
 @media (max-width: 640px) {
-  .navbar { padding: 0.75rem 1rem; }
-  .student-nav { padding: 0.35rem 0.75rem; gap: 0.15rem; top: 58px; }
-  .container { padding: 0 0.85rem; margin: 1.1rem auto; }
+  .navbar { padding: 0.55rem 0.7rem; width: 100%; box-sizing: border-box; }
+  .logo { font-size: 1.2rem; white-space: nowrap; }
+  .nav-actions { gap: 0.3rem; flex-shrink: 0; }
+  .menu-icon { font-size: 1.1rem; padding: 0.3rem 0.45rem; }
+  #themeToggle { padding: 0.3rem !important; width: 34px; height: 34px; }
+  .student-nav { padding: 0.35rem 0.6rem; gap: 0.1rem; top: 52px; }
+  .student-nav a { font-size: 0.78rem; padding: 0.55rem 0.7rem; }
+  .container { padding: 0 0.75rem; margin: 1rem auto; }
   .prestasi-table { font-size: 0.72rem; }
   .card { padding: 1.15rem; border-radius: 1.1rem; }
   .dashboard-grid { grid-template-columns: 1fr; }
   .reset-fab { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+  .login-container, .leaderboard-container { margin: 0.5rem auto; }
+}
+
+/* SPACE HOME BACKGROUND + GLASS PANELS (home only) */
+.space-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  transition: background 0.5s ease;
+  background:
+    radial-gradient(900px 500px at 20% 10%, rgba(255,255,255,0.85), transparent 55%),
+    radial-gradient(700px 400px at 80% 0%, rgba(186,230,253,0.7), transparent 50%),
+    linear-gradient(180deg, #e0f2fe 0%, #bae6fd 35%, #93c5fd 100%);
+}
+body.dark .space-bg {
+  background:
+    radial-gradient(ellipse at 30% 20%, #1e3a8a 0%, #0b1220 55%, #020617 100%);
+}
+.space-bg canvas { width: 100%; height: 100%; display: block; }
+body.home-mode .container { position: relative; z-index: 1; }
+body.home-mode .card.glass {
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  border: 1px solid rgba(255,255,255,0.22);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  color: #f8fafc;
+}
+body.home-mode .card.glass h2,
+body.home-mode .card.glass h3,
+body.home-mode .card.glass p,
+body.home-mode .card.glass .leaderboard-name-new { color: #0f172a; }
+body.dark.home-mode .card.glass h2,
+body.dark.home-mode .card.glass h3,
+body.dark.home-mode .card.glass p,
+body.dark.home-mode .card.glass .leaderboard-name-new { color: #f8fafc; }
+body.home-mode .card.glass input {
+  background: rgba(255,255,255,0.55);
+  border-color: rgba(15,23,42,0.12);
+  color: #0f172a;
+}
+body.home-mode .card.glass input::placeholder { color: rgba(15,23,42,0.45); }
+body.dark.home-mode .card.glass input {
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.25);
+  color: white;
+}
+body.dark.home-mode .card.glass input::placeholder { color: rgba(255,255,255,0.65); }
+body.dark.home-mode .card.glass {
+  background: rgba(15,23,42,0.45);
+  border-color: rgba(255,255,255,0.12);
+}
+@media (prefers-reduced-motion: reduce) {
+  .space-bg { display: none; }
 }
 </style>
 </head>
@@ -684,8 +745,9 @@ canvas { max-height: 260px; width: 100%; }
 <div class="container" id="mainContainer">
   <!-- LOGIN PAGE -->
   <div id="loginPage" class="fade-transition">
+    <div class="space-bg" id="spaceBg"><canvas id="spaceCanvas"></canvas></div>
     <div class="login-container">
-      <div class="card" style="text-align: center;">
+      <div class="card glass" style="text-align: center;">
         <i class="fas fa-graduation-cap" style="font-size: 3.5rem; color: var(--accent); margin-bottom: 1rem;"></i>
         <h2>Login Siswa</h2>
         <form id="studentLoginForm">
@@ -702,7 +764,7 @@ canvas { max-height: 260px; width: 100%; }
       </div>
     </div>
     <div class="leaderboard-container">
-      <div class="card">
+      <div class="card glass">
         <h3 style="text-align: center; margin-bottom: 1rem;"><i class="fas fa-trophy" style="color: var(--gold);"></i> 🏆 Leaderboard 5 Siswa Terbaik</h3>
         <div id="leaderboardList" style="margin-top: 0.5rem;"><div style="text-align: center; padding: 1rem;">Memuat data...</div></div>
       </div>
@@ -888,7 +950,7 @@ canvas { max-height: 260px; width: 100%; }
 </div>
 
 <footer class="footer">
-  ©2026 Digital Electronic Studio (DES), All Rights Reserved. | v1.0.0
+  ©2026 Digital Electronic Studio (DES), All Rights Reserved. | v3.0.0
 </footer>
 
 <!-- MODAL ACHIEVEMENT WITH TABLE -->
@@ -1381,6 +1443,8 @@ canvas { max-height: 260px; width: 100%; }
   function switchToPage(page){ 
     ['loginPage','aboutPage','faqRulesPage','studentPanel','adminPanel'].forEach(p=>{ let el=document.getElementById(p); if(el && el!==page){ el.style.opacity='0'; setTimeout(()=>el.classList.add('hidden-page'),200); } }); 
     if(page){ setTimeout(()=>{ page.classList.remove('hidden-page'); setTimeout(()=>page.style.opacity='1',50); },200); } 
+    if(page && page.id === 'loginPage') document.body.classList.add('home-mode');
+    else document.body.classList.remove('home-mode');
     closeMenu();
   }
   
@@ -1619,6 +1683,58 @@ canvas { max-height: 260px; width: 100%; }
       out.innerHTML = 'File tidak bisa dibaca. Gunakan format contoh (.xlsx atau .csv).';
     }
   });
+
+
+  // Interactive space background (home only, no logic change)
+  function initSpace() {
+    const canvas = document.getElementById('spaceCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w, h, stars = [], mouse = { x: 0, y: 0 };
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      stars = Array.from({ length: Math.min(180, Math.floor(w * h / 9000)) }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.6 + 0.3,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        a: Math.random()
+      }));
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    function tick() {
+      if (!document.body.classList.contains('home-mode')) { requestAnimationFrame(tick); return; }
+      ctx.clearRect(0, 0, w, h);
+      const isDark = document.body.classList.contains('dark');
+      stars.forEach(s => {
+        s.x += s.vx + (mouse.x - w / 2) * 0.00015;
+        s.y += s.vy + (mouse.y - h / 2) * 0.00015;
+        if (s.x < 0) s.x = w; if (s.x > w) s.x = 0;
+        if (s.y < 0) s.y = h; if (s.y > h) s.y = 0;
+        s.a += 0.01;
+        if (isDark) {
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(255,255,255,${0.45 + Math.sin(s.a) * 0.4})`;
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // soft clouds / light particles in daytime
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(255,255,255,${0.25 + Math.sin(s.a) * 0.2})`;
+          ctx.arc(s.x, s.y, s.r * 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
+      requestAnimationFrame(tick);
+    }
+    tick();
+  }
+  initSpace();
+  document.body.classList.add('home-mode');
 
   (async()=>{ await loadFromCloud(); renderLeaderboard(); })();
 </script>
