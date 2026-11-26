@@ -670,17 +670,17 @@ canvas { max-height: 260px; width: 100%; }
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  transition: background 0.5s ease;
+  transition: background 1.5s cubic-bezier(0.4, 0, 0.2, 1);
   background:
-    radial-gradient(900px 500px at 20% 10%, rgba(255,255,255,0.85), transparent 55%),
-    radial-gradient(700px 400px at 80% 0%, rgba(186,230,253,0.7), transparent 50%),
-    linear-gradient(180deg, #e0f2fe 0%, #bae6fd 35%, #93c5fd 100%);
+    radial-gradient(ellipse at 75% 20%, rgba(255,248,200,0.6), transparent 45%),
+    linear-gradient(180deg, #dbeafe 0%, #bfdbfe 40%, #93c5fd 100%);
 }
 body.dark .space-bg {
   background:
-    radial-gradient(ellipse at 30% 20%, #1e3a8a 0%, #0b1220 55%, #020617 100%);
+    radial-gradient(ellipse at 70% 25%, rgba(88,28,135,0.45), transparent 50%),
+    linear-gradient(180deg, #0b1220 0%, #1e1b4b 55%, #312e81 100%);
 }
-.space-bg canvas { width: 100%; height: 100%; display: block; }
+.space-bg canvas { width: 100% !important; height: 100% !important; max-height: none !important; display: block; }
 body.home-mode .container { position: relative; z-index: 1; }
 body.home-mode .card.glass {
   background: rgba(255,255,255,0.55);
@@ -1710,45 +1710,173 @@ body.dark.home-mode .card.glass input::placeholder { color: rgba(255,255,255,0.6
     const canvas = document.getElementById('spaceCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let w, h, stars = [], mouse = { x: 0, y: 0 };
+    let w, h;
+    let stars = [], milky = [], clouds = [], birds = [];
+    let mouse = { x: 0, y: 0 };
+    let sunY = 0.18, moonY = 0.92, targetSun = 0.18, targetMoon = 0.92;
+    let nightAmt = 0;
+
     function resize() {
       w = canvas.width = window.innerWidth;
       h = canvas.height = window.innerHeight;
-      stars = Array.from({ length: Math.min(180, Math.floor(w * h / 9000)) }, () => ({
+      stars = Array.from({ length: Math.min(320, Math.floor(w * h / 6500)) }, () => ({
+        x: Math.random() * w, y: Math.random() * h,
+        r: Math.random() * 1.5 + 0.3,
+        a: Math.random() * Math.PI * 2,
+        bright: Math.random() > 0.78
+      }));
+      milky = Array.from({ length: 260 }, () => {
+        const t = Math.random();
+        return {
+          x: t * w,
+          y: h * 0.42 + Math.sin(t * 3.2) * h * 0.12 + (Math.random() - 0.5) * h * 0.22,
+          r: Math.random() * 1.2 + 0.2,
+          a: Math.random() * Math.PI * 2
+        };
+      });
+      clouds = Array.from({ length: 12 }, () => ({
         x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 1.6 + 0.3,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        a: Math.random()
+        y: Math.random() * h * 0.75 + h * 0.06,
+        s: 0.85 + Math.random() * 1.0,
+        v: 0.12 + Math.random() * 0.22
+      }));
+      birds = Array.from({ length: 6 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h * 0.55 + h * 0.08,
+        v: 0.5 + Math.random() * 0.7,
+        flap: Math.random() * Math.PI * 2,
+        s: 0.7 + Math.random() * 0.5
       }));
     }
     resize();
     window.addEventListener('resize', resize);
     document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+    function drawCloud(c) {
+      ctx.save();
+      ctx.translate(c.x, c.y);
+      ctx.scale(c.s, c.s);
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.beginPath();
+      ctx.arc(-28, 4, 16, 0, Math.PI * 2);
+      ctx.arc(-10, -10, 20, 0, Math.PI * 2);
+      ctx.arc(12, -16, 24, 0, Math.PI * 2);
+      ctx.arc(30, -6, 18, 0, Math.PI * 2);
+      ctx.arc(14, 8, 14, 0, Math.PI * 2);
+      ctx.arc(-8, 10, 12, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    function drawBird(b) {
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.scale(b.s, b.s);
+      const wing = Math.sin(b.flap) * 5;
+      ctx.strokeStyle = 'rgba(30,41,59,0.7)';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(-7, wing); ctx.quadraticCurveTo(0, -1, 7, wing); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-7, -wing); ctx.quadraticCurveTo(0, 1, 7, -wing); ctx.stroke();
+      ctx.restore();
+    }
+    function drawCrescent(x, y, r) {
+      ctx.save();
+      ctx.fillStyle = 'rgba(255,248,220,0.95)';
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x + r * 0.35, y - r * 0.1, r * 0.82, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
     function tick() {
       if (!document.body.classList.contains('home-mode')) { requestAnimationFrame(tick); return; }
-      ctx.clearRect(0, 0, w, h);
       const isDark = document.body.classList.contains('dark');
-      stars.forEach(s => {
-        s.x += s.vx + (mouse.x - w / 2) * 0.00015;
-        s.y += s.vy + (mouse.y - h / 2) * 0.00015;
-        if (s.x < 0) s.x = w; if (s.x > w) s.x = 0;
-        if (s.y < 0) s.y = h; if (s.y > h) s.y = 0;
-        s.a += 0.01;
-        if (isDark) {
+      targetSun = isDark ? 0.95 : 0.16;
+      targetMoon = isDark ? 0.18 : 0.95;
+      sunY += (targetSun - sunY) * 0.02;
+      moonY += (targetMoon - moonY) * 0.02;
+      nightAmt += ((isDark ? 1 : 0) - nightAmt) * 0.018;
+      const day = 1 - nightAmt;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // sun
+      if (day > 0.02) {
+        const sx = w * 0.72, sy = sunY * h;
+        const g = ctx.createRadialGradient(sx, sy, 6, sx, sy, 100);
+        g.addColorStop(0, `rgba(255,248,200,${0.95 * day})`);
+        g.addColorStop(0.4, `rgba(255,200,80,${0.45 * day})`);
+        g.addColorStop(1, 'rgba(255,200,80,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(sx, sy, 100, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255,240,160,${0.95 * day})`;
+        ctx.arc(sx, sy, 20, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // moon
+      if (nightAmt > 0.02) {
+        const mx = w * 0.72, my = moonY * h;
+        ctx.globalAlpha = nightAmt;
+        drawCrescent(mx, my, 22);
+        ctx.globalAlpha = 1;
+        const mg = ctx.createRadialGradient(mx, my, 4, mx, my, 70);
+        mg.addColorStop(0, `rgba(255,248,220,${0.35 * nightAmt})`);
+        mg.addColorStop(1, 'rgba(255,248,220,0)');
+        ctx.fillStyle = mg;
+        ctx.beginPath();
+        ctx.arc(mx, my, 70, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // stars + milky way
+      if (nightAmt > 0.02) {
+        milky.forEach(m => {
           ctx.beginPath();
-          ctx.fillStyle = `rgba(255,255,255,${0.45 + Math.sin(s.a) * 0.4})`;
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(200,210,255,${(0.25 + Math.sin(m.a) * 0.15) * nightAmt})`;
+          ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
           ctx.fill();
-        } else {
-          // soft clouds / light particles in daytime
+          m.a += 0.015;
+        });
+        stars.forEach(s => {
+          s.a += 0.02;
+          const tw = 0.5 + Math.sin(s.a) * 0.45;
           ctx.beginPath();
-          ctx.fillStyle = `rgba(255,255,255,${0.25 + Math.sin(s.a) * 0.2})`;
-          ctx.arc(s.x, s.y, s.r * 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = s.bright
+            ? `rgba(255,255,230,${tw * nightAmt})`
+            : `rgba(255,255,255,${(0.55 + Math.sin(s.a) * 0.35) * nightAmt})`;
+          ctx.arc(s.x, s.y, s.bright ? s.r * 1.5 : s.r, 0, Math.PI * 2);
           ctx.fill();
-        }
-      });
+        });
+      }
+
+      // clouds + birds
+      if (day > 0.02) {
+        clouds.forEach(c => {
+          c.x += c.v;
+          if (c.x > w + 100) c.x = -100;
+          ctx.globalAlpha = day;
+          drawCloud(c);
+          ctx.globalAlpha = 1;
+        });
+        birds.forEach(b => {
+          b.x += b.v;
+          b.flap += 0.16;
+          if (b.x > w + 20) { b.x = -20; b.y = Math.random() * h * 0.55 + h * 0.08; }
+          ctx.globalAlpha = day;
+          drawBird(b);
+          ctx.globalAlpha = 1;
+        });
+      }
+
       requestAnimationFrame(tick);
     }
     tick();
